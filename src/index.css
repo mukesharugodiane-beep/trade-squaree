@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+:root {
+  --brand: #0662AB;
+  --brand-dark: #043E6B;
+  --brand-light: #EBF3FA;
+  --success: #1E7E34;
+  --warning: #B76E00;
+  --error: #C92A2A;
+  --info: #0C63E4;
+  --text-display: #0F172A;
+  --text-body: #334155;
+  --text-sub: #64748B;
+  --white: #FFFFFF;
+  --gray-100: #F1F5F9;
+  --gray-300: #CBD5E1;
+  --gray-500: #64748B;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-body);
+  background-color: #FFFFFF;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom utility classes respecting the design system */
+.bg-brand { background-color: var(--brand); }
+.bg-brand-dark { background-color: var(--brand-dark); }
+.bg-brand-light { background-color: var(--brand-light); }
+.bg-gray-100-custom { background-color: var(--gray-100); }
+
+.text-brand { color: var(--brand); }
+.text-display-custom { color: var(--text-display); }
+.text-body-custom { color: var(--text-body); }
+.text-sub-custom { color: var(--text-sub); }
+.text-success-custom { color: var(--success); }
+.text-warning-custom { color: var(--warning); }
+.text-error-custom { color: var(--error); }
+
+.border-gray-300-custom { border-color: var(--gray-300); }
+.border-gray-100-custom { border-color: var(--gray-100); }
+.border-brand-custom { border-color: var(--brand); }
+
+/* Focus styles */
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}

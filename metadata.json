@@ -1,0 +1,6 @@
+{
+  "name": "Trade Square - Rwanda-Kenya SME Trade Facilitation",
+  "description": "MINICOM pilot portal assisting Rwandan SMEs in identifying explainable, verified trading partners along the Kigali-Nairobi Northern Corridor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
