@@ -4,6 +4,24 @@
   --font-sans: 'Calibri', 'Carlito', 'Candara', 'Segoe UI', Arial, sans-serif;
   --font-serif: 'Calibri', 'Carlito', 'Candara', 'Segoe UI', Arial, sans-serif;
   --font-mono: 'Calibri', 'Carlito', 'Candara', 'Segoe UI', Arial, sans-serif;
+
+  /* Elevated, readable typography scale across the entire application */
+  --text-xs: 0.95rem;
+  --text-xs--line-height: 1.45;
+  --text-sm: 1.0625rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1.1875rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.35rem;
+  --text-lg--line-height: 1.5;
+  --text-xl: 1.55rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.85rem;
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.2;
+  --text-4xl: 2.75rem;
+  --text-4xl--line-height: 1.15;
 }
 
 :root {
@@ -23,6 +41,16 @@
   --gray-500: #64748B;
 }
 
+html {
+  font-size: 17px;
+}
+
+@media (min-width: 640px) {
+  html {
+    font-size: 18px;
+  }
+}
+
 html,
 body,
 *,
@@ -40,7 +68,58 @@ body {
   background-color: #FFFFFF;
   margin: 0;
   padding: 0;
+  font-size: 1rem;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Scale up arbitrary micro-pixel utility classes across all pages & dashboard views */
+.text-\[8px\],
+.text-\[8\.5px\],
+.text-\[9px\],
+.text-\[9\.5px\] {
+  font-size: 13.5px !important;
+  line-height: 1.4 !important;
+}
+
+.text-\[10px\],
+.text-\[10\.5px\] {
+  font-size: 14.5px !important;
+  line-height: 1.45 !important;
+}
+
+.text-\[11px\],
+.text-\[11\.5px\],
+.sm\:text-\[11px\] {
+  font-size: 15.5px !important;
+  line-height: 1.5 !important;
+}
+
+.text-\[12px\],
+.text-\[12\.5px\],
+.sm\:text-\[12px\] {
+  font-size: 16.5px !important;
+  line-height: 1.5 !important;
+}
+
+.text-\[13px\],
+.text-\[13\.5px\],
+.sm\:text-\[13px\],
+.md\:text-\[13px\] {
+  font-size: 17.5px !important;
+  line-height: 1.5 !important;
+}
+
+.text-\[14px\],
+.sm\:text-\[14px\] {
+  font-size: 18.5px !important;
+  line-height: 1.55 !important;
+}
+
+.text-\[15px\],
+.sm\:text-\[15px\] {
+  font-size: 19.5px !important;
+  line-height: 1.55 !important;
 }
 
 /* Custom utility classes respecting the design system */

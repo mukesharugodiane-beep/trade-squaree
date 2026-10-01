@@ -30,6 +30,7 @@ import { TrustAndDataPage } from './pages/TrustAndDataPage';
 import { PilotPage } from './pages/PilotPage';
 import { FaqPage } from './pages/FaqPage';
 import { ContactPage } from './pages/ContactPage';
+import { LoginPage } from './pages/LoginPage';
 
 // Optional SME Pilot Portal Preview
 import {
@@ -63,17 +64,96 @@ import { ExportFormScreen } from './components/ExportFormScreen';
 import { ShortlistScreen } from './components/ShortlistScreen';
 import { MatchDetailScreen } from './components/MatchDetailScreen';
 import { PipelineScreen } from './components/PipelineScreen';
-import { OfficerScreen } from './components/OfficerScreen';
 import { AssumptionModal } from './components/AssumptionModal';
 import { IntroductionModal } from './components/IntroductionModal';
+import { TradeChat } from './components/TradeChat';
 import { ArrowLeft, ExternalLink, Globe } from 'lucide-react';
+import { AccountCreationType } from './components/CreateAccountDropdown';
+import {
+  auth,
+  onAuthStateChanged,
+  User as FirebaseUser,
+  FirestoreUserProfile,
+  subscribeToUserProfile,
+  saveUserProfileToFirestore,
+  updateSavedPartnersInFirestore,
+  signOutFirebaseUser,
+  firestoreProfileToRwandanSME
+} from './services/firebase';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageId>('home');
+  const [selectedAccountType, setSelectedAccountType] = useState<AccountCreationType>('business');
   const [currentLang, setCurrentLang] = useState<PublicLanguage>(() => backgroundSiteTranslator.getCurrentLanguage());
   const [isSignInModalOpen, setIsSignInModalOpen] = useState<boolean>(false);
   const [portalMode, setPortalMode] = useState<boolean>(false);
+  const [gmpQuotaExceeded, setGmpQuotaExceeded] = useState<boolean>(false);
   const [, startTransition] = useTransition();
+
+  // Real Firebase Authentication & Firestore Profile State
+  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
+  const [authReady, setAuthReady] = useState<boolean>(false);
+  const [firestoreProfile, setFirestoreProfile] = useState<FirestoreUserProfile | null>(null);
+
+  useEffect(() => {
+    const handleQuota = () => setGmpQuotaExceeded(true);
+    window.addEventListener('gmp-quota-exceeded', handleQuota);
+    return () => window.removeEventListener('gmp-quota-exceeded', handleQuota);
+  }, []);
+
+  // Listen to Firebase Auth state changes
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      setFirebaseUser(user);
+      setAuthReady(true);
+      if (!user) {
+        setFirestoreProfile(null);
+      }
+    });
+    return () => unsubscribeAuth();
+  }, []);
+
+  // Attach real-time Firestore listener ONLY when auth is ready and user is authenticated
+  useEffect(() => {
+    if (!authReady || !firebaseUser) return;
+
+    const unsubscribeProfile = subscribeToUserProfile(firebaseUser.uid, (profile) => {
+      if (profile) {
+        setFirestoreProfile(profile);
+        const mappedSme = firestoreProfileToRwandanSME(profile, firebaseUser.photoURL);
+        setSmes((prev) => {
+          const filtered = prev.filter((s) => s.id !== mappedSme.id);
+          return [mappedSme, ...filtered];
+        });
+        setActiveSmeId(mappedSme.id);
+        setSavedPartnerIds(
+          profile.savedPartnerIds && profile.savedPartnerIds.length > 0
+            ? profile.savedPartnerIds
+            : ['kp-1', 'kp-8']
+        );
+        const prod =
+          HS_PRODUCTS.find((p) => p.hsCode === mappedSme.selectedHsCode) || HS_PRODUCTS[0];
+        setOpportunity({
+          productHs: prod.hsCode,
+          capacityKgMonth: mappedSme.monthlyCapacityKg,
+          exWorksPriceRwf: mappedSme.exWorksPriceRwf,
+          targetCountry: 'Kenya',
+          partnerType: 'All',
+          requiredCertifications:
+            mappedSme.certifications.length > 0
+              ? [mappedSme.certifications[0]]
+              : ['RSB S-Mark']
+        });
+      } else {
+        // Provision initial Firestore profile for newly authenticated real user
+        saveUserProfileToFirestore(firebaseUser).then((created) => {
+          setFirestoreProfile(created);
+        });
+      }
+    });
+
+    return () => unsubscribeProfile();
+  }, [authReady, firebaseUser]);
 
   // Automatic Background Translation when language changes or route changes
   useEffect(() => {
@@ -88,7 +168,7 @@ export default function App() {
   const [partners] = useState<KenyanPartner[]>(SEED_KENYAN_PARTNERS);
   const [activePartnerDetailId, setActivePartnerDetailId] = useState<string>('kp-1');
   const [assumptions, setAssumptions] = useState<CorridorAssumptions>(INITIAL_ASSUMPTIONS);
-  const [weights, setWeights] = useState<ScoringWeights>(INITIAL_WEIGHTS);
+  const [weights] = useState<ScoringWeights>(INITIAL_WEIGHTS);
   const [isAssumptionsModalOpen, setIsAssumptionsModalOpen] = useState<boolean>(false);
   const [savedPartnerIds, setSavedPartnerIds] = useState<string[]>(['kp-1', 'kp-8']);
   const [pipelineItems, setPipelineItems] = useState<PipelineItem[]>(INITIAL_PIPELINE_ITEMS);
@@ -96,7 +176,10 @@ export default function App() {
   const [isIntroModalOpen, setIsIntroModalOpen] = useState<boolean>(false);
   const [targetIntroPartner, setTargetIntroPartner] = useState<KenyanPartner | null>(null);
 
-  const activeSme = smes.find((s) => s.id === activeSmeId) || smes[0];
+  const activeSme =
+    firebaseUser && firestoreProfile
+      ? firestoreProfileToRwandanSME(firestoreProfile, firebaseUser.photoURL)
+      : smes.find((s) => s.id === activeSmeId) || smes[0];
 
   const [opportunity, setOpportunity] = useState<ExportOpportunity>({
     productHs: activeSme.selectedHsCode || '0713',
@@ -124,7 +207,8 @@ export default function App() {
         'trust-and-data',
         'pilot',
         'faq',
-        'contact'
+        'contact',
+        'login'
       ];
       if (validPages.includes(hash as PageId)) {
         setCurrentPage(hash as PageId);
@@ -166,8 +250,11 @@ export default function App() {
     }
   }, [currentPage, portalMode]);
 
-  const handleNavigate = (page: PageId) => {
+  const handleNavigate = (page: PageId, accountType?: AccountCreationType) => {
     startTransition(() => {
+      if (accountType) {
+        setSelectedAccountType(accountType);
+      }
       setPortalMode(false);
       setCurrentPage(page);
       window.location.hash = `#${page}`;
@@ -180,6 +267,18 @@ export default function App() {
     setPortalScreen('dashboard-home');
     window.location.hash = '#portal';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleToggleSavePartner = (partnerId: string) => {
+    setSavedPartnerIds((prev) => {
+      const next = prev.includes(partnerId)
+        ? prev.filter((id) => id !== partnerId)
+        : [...prev, partnerId];
+      if (firebaseUser) {
+        updateSavedPartnersInFirestore(firebaseUser.uid, next);
+      }
+      return next;
+    });
   };
 
   // Scored shortlist calculation for portal preview
@@ -199,9 +298,25 @@ export default function App() {
     assumptions
   );
 
-  if (portalMode) {
+  if (portalMode && (!authReady || firebaseUser)) {
     return (
       <>
+        {gmpQuotaExceeded && (
+          <div className="bg-amber-50 border-b border-amber-200 text-amber-900 px-4 py-2.5 text-xs md:text-sm text-center sticky top-0 z-50 shadow-sm">
+            <span>
+              Google Maps Platform quota reached. If you are the app owner, visit{' '}
+              <a
+                href="https://developers.google.com/maps/ai/ai-studio?utm_campaign=gmp_mcp_codeassist_v1_aistudio#quota_exceeded_errors"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-semibold text-amber-950 hover:text-amber-800"
+              >
+                maps developer site
+              </a>{' '}
+              for instructions to update your account.
+            </span>
+          </div>
+        )}
         <DashboardLayout
           activeScreen={portalScreen}
           onSelectScreen={setPortalScreen}
@@ -231,13 +346,38 @@ export default function App() {
               requiredCertifications:
                 updated.certifications.length > 0 ? [updated.certifications[0]] : ['RSB S-Mark']
             }));
+            if (firebaseUser) {
+              saveUserProfileToFirestore(
+                firebaseUser,
+                {
+                  businessName: updated.businessName,
+                  rdbNumber: updated.rdbNumber,
+                  tin: updated.tin,
+                  district: updated.district,
+                  contactPerson: updated.contactPerson,
+                  phone: updated.phone,
+                  email: updated.email,
+                  selectedHsCode: updated.selectedHsCode,
+                  products: updated.products,
+                  certifications: updated.certifications,
+                  monthlyCapacityKg: updated.monthlyCapacityKg,
+                  exWorksPriceRwf: updated.exWorksPriceRwf
+                },
+                firestoreProfile
+              );
+            }
           }}
           shortlistCount={scoredPartners.length}
           pendingIntroCount={introRequests.filter((r) => r.status === 'Pending review').length}
           searchQuery={dashboardSearchQuery}
           onSearchChange={setDashboardSearchQuery}
           onOpenAssumptions={() => setIsAssumptionsModalOpen(true)}
-          onExitPortal={() => handleNavigate('home')}
+          onExitPortal={async () => {
+            if (firebaseUser) {
+              await signOutFirebaseUser();
+            }
+            handleNavigate('login');
+          }}
           opportunity={opportunity}
           scoredPartners={scoredPartners}
           onSelectPartnerDetail={(partner) => {
@@ -261,13 +401,7 @@ export default function App() {
               pipelineItems={pipelineItems}
               introRequests={introRequests}
               searchQuery={dashboardSearchQuery}
-              onToggleSavePartner={(partnerId) => {
-                setSavedPartnerIds((prev) =>
-                  prev.includes(partnerId)
-                    ? prev.filter((id) => id !== partnerId)
-                    : [...prev, partnerId]
-                );
-              }}
+              onToggleSavePartner={handleToggleSavePartner}
               onSelectPartnerDetail={(partner) => {
                 setActivePartnerDetailId(partner.id);
                 setPortalScreen('match-detail');
@@ -300,13 +434,7 @@ export default function App() {
               opportunity={opportunity}
               assumptions={assumptions}
               savedPartnerIds={savedPartnerIds}
-              onToggleSavePartner={(partnerId) => {
-                setSavedPartnerIds((prev) =>
-                  prev.includes(partnerId)
-                    ? prev.filter((id) => id !== partnerId)
-                    : [...prev, partnerId]
-                );
-              }}
+              onToggleSavePartner={handleToggleSavePartner}
               onSelectPartnerDetail={(partner) => {
                 setActivePartnerDetailId(partner.id);
                 setPortalScreen('match-detail');
@@ -338,9 +466,29 @@ export default function App() {
                     sme.certifications.length > 0 ? [sme.certifications[0]] : ['RSB S-Mark']
                 });
               }}
-              onUpdateSme={(updated) =>
-                setSmes((prev) => prev.map((s) => (s.id === updated.id ? updated : s)))
-              }
+              onUpdateSme={(updated) => {
+                setSmes((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+                if (firebaseUser) {
+                  saveUserProfileToFirestore(
+                    firebaseUser,
+                    {
+                      businessName: updated.businessName,
+                      rdbNumber: updated.rdbNumber,
+                      tin: updated.tin,
+                      district: updated.district,
+                      contactPerson: updated.contactPerson,
+                      phone: updated.phone,
+                      email: updated.email,
+                      selectedHsCode: updated.selectedHsCode,
+                      products: updated.products,
+                      certifications: updated.certifications,
+                      monthlyCapacityKg: updated.monthlyCapacityKg,
+                      exWorksPriceRwf: updated.exWorksPriceRwf
+                    },
+                    firestoreProfile
+                  );
+                }
+              }}
               onProceedToExportForm={() => setPortalScreen('export-form')}
             />
           )}
@@ -349,6 +497,7 @@ export default function App() {
             <ExportFormScreen
               currentOpportunity={opportunity}
               sme={activeSme}
+              partners={partners}
               assumptions={assumptions}
               onSaveOpportunity={setOpportunity}
               onViewShortlist={() => setPortalScreen('shortlist')}
@@ -362,13 +511,7 @@ export default function App() {
               sme={activeSme}
               opportunity={opportunity}
               savedPartnerIds={savedPartnerIds}
-              onToggleSavePartner={(partnerId) => {
-                setSavedPartnerIds((prev) =>
-                  prev.includes(partnerId)
-                    ? prev.filter((id) => id !== partnerId)
-                    : [...prev, partnerId]
-                );
-              }}
+              onToggleSavePartner={handleToggleSavePartner}
               onRequestIntroduction={(partner) => {
                 setTargetIntroPartner(partner);
                 setIsIntroModalOpen(true);
@@ -394,13 +537,7 @@ export default function App() {
                 setIsIntroModalOpen(true);
               }}
               isSaved={savedPartnerIds.includes(selectedPartner.id)}
-              onToggleSavePartner={(partnerId) => {
-                setSavedPartnerIds((prev) =>
-                  prev.includes(partnerId)
-                    ? prev.filter((id) => id !== partnerId)
-                    : [...prev, partnerId]
-                );
-              }}
+              onToggleSavePartner={handleToggleSavePartner}
             />
           )}
 
@@ -438,40 +575,6 @@ export default function App() {
               onSelectPartnerDetail={(partner) => {
                 setActivePartnerDetailId(partner.id);
                 setPortalScreen('match-detail');
-              }}
-            />
-          )}
-
-          {portalScreen === 'officer-view' && (
-            <OfficerScreen
-              requests={introRequests}
-              allSmes={smes}
-              allPartners={partners}
-              weights={weights}
-              onUpdateWeights={setWeights}
-              onApproveRequest={(requestId, notes) => {
-                const refCode = `MINICOM-FAC-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-                setIntroRequests((prev) =>
-                  prev.map((r) =>
-                    r.id === requestId
-                      ? {
-                          ...r,
-                          status: 'Facilitation approved',
-                          officerNotes: notes,
-                          facilitationLetterRef: refCode
-                        }
-                      : r
-                  )
-                );
-              }}
-              onRequestMoreInfo={(requestId, notes) => {
-                setIntroRequests((prev) =>
-                  prev.map((r) =>
-                    r.id === requestId
-                      ? { ...r, status: 'More information requested', officerNotes: notes }
-                      : r
-                  )
-                );
               }}
             />
           )}
@@ -527,7 +630,7 @@ export default function App() {
         onNavigate={handleNavigate}
         currentLang={currentLang}
         onLanguageChange={setCurrentLang}
-        onOpenSignIn={() => setIsSignInModalOpen(true)}
+        onOpenSignIn={() => handleNavigate('login')}
       />
 
       {/* Main Content Area with Skip Target */}
@@ -537,11 +640,11 @@ export default function App() {
           currentPage === 'home' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 py-8'
         }`}
       >
-        {/* Public Website Pages (8 working screens) */}
+        {/* Public Website Pages */}
         {currentPage === 'home' && (
           <HomePage
             onNavigate={handleNavigate}
-            onOpenSignIn={() => setIsSignInModalOpen(true)}
+            onOpenSignIn={() => handleNavigate('login')}
             currentLang={currentLang}
           />
         )}
@@ -549,14 +652,14 @@ export default function App() {
         {currentPage === 'how-it-works' && (
           <HowItWorksPage
             onNavigate={handleNavigate}
-            onOpenSignIn={() => setIsSignInModalOpen(true)}
+            onOpenSignIn={() => handleNavigate('login')}
           />
         )}
 
         {currentPage === 'for-smes' && (
           <ForSmesPage
             onNavigate={handleNavigate}
-            onOpenSignIn={() => setIsSignInModalOpen(true)}
+            onOpenSignIn={() => handleNavigate('login')}
           />
         )}
 
@@ -572,7 +675,23 @@ export default function App() {
 
         {currentPage === 'faq' && <FaqPage onNavigate={handleNavigate} />}
 
-        {currentPage === 'contact' && <ContactPage />}
+        {currentPage === 'contact' && (
+          <ContactPage
+            initialAccountType={selectedAccountType}
+            firebaseUser={firebaseUser}
+            firestoreProfile={firestoreProfile}
+            onLaunchPortal={handleLaunchPortal}
+          />
+        )}
+
+        {(currentPage === 'login' || (portalMode && authReady && !firebaseUser)) && (
+          <LoginPage
+            onLaunchInteractivePortal={handleLaunchPortal}
+            onNavigate={handleNavigate}
+            firebaseUser={firebaseUser}
+            firestoreProfile={firestoreProfile}
+          />
+        )}
       </main>
 
       {/* Sign In Modal */}
@@ -580,7 +699,30 @@ export default function App() {
         isOpen={isSignInModalOpen}
         onClose={() => setIsSignInModalOpen(false)}
         onLaunchInteractivePortal={handleLaunchPortal}
+        onCreateAccount={(type) => handleNavigate('contact', type)}
       />
+
+      {/* Trade Square AI Chatbot on Homepage */}
+      {currentPage === 'home' && (
+        <TradeChat
+          sme={activeSme}
+          opportunity={opportunity}
+          scoredPartners={scoredPartners}
+          onSelectPartnerDetail={(partner) => {
+            setActivePartnerDetailId(partner.id);
+            setPortalMode(true);
+            setPortalScreen('match-detail');
+            window.location.hash = '#portal';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onRequestIntroduction={(partner) => {
+            setTargetIntroPartner(partner);
+            setPortalMode(true);
+            setIsIntroModalOpen(true);
+            window.location.hash = '#portal';
+          }}
+        />
+      )}
 
       {/* Official Government MINICOM Footer */}
       <PublicFooter onNavigate={handleNavigate} currentLang={currentLang} />

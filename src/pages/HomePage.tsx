@@ -21,10 +21,11 @@ import { PageId, PublicLanguage } from '../types/publicSite';
 import { TRANSLATIONS } from '../data/translations';
 import { HowItWorksHighlights } from '../components/HowItWorksHighlights';
 import { WhoTradeSquareIsFor } from '../components/WhoTradeSquareIsFor';
+import { CreateAccountDropdown, AccountCreationType } from '../components/CreateAccountDropdown';
 import heroPosterImg from '../assets/images/rwanda_summit_stage_1790763828776.jpg';
 
 interface HomePageProps {
-  onNavigate: (page: PageId) => void;
+  onNavigate: (page: PageId, accountType?: AccountCreationType) => void;
   onOpenSignIn: () => void;
   currentLang: PublicLanguage;
 }
@@ -100,19 +101,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSignIn, cu
           </p>
 
           {/* Action CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 w-full max-w-xs sm:max-w-none px-2 sm:px-0">
-            {/* Request Access Button */}
-            <button
-              type="button"
-              onClick={() => onNavigate('contact')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 whitespace-nowrap text-xs sm:text-sm font-bold cursor-pointer bg-white border border-[#DDEBF7] transition-all duration-200 group h-11 sm:h-12 px-7 sm:px-8 rounded-full hover:bg-[#DDEBF7] shadow-xl"
-              aria-label="Request access"
-            >
-              <span className="text-[#005A94]">
-                {t.btnRequestAccess}
-              </span>
-              <ChevronRight className="w-4 h-4 text-[#005A94] transition-transform duration-200 group-hover:translate-x-1" />
-            </button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 w-full max-w-xs sm:max-w-none px-2 sm:px-0 relative z-30">
+            {/* Create Account Button with Business / Partner Dropdown */}
+            <CreateAccountDropdown
+              label={t.btnRequestAccess}
+              onSelectAccountType={(type) => onNavigate('contact', type)}
+              variant="hero"
+              align="left"
+            />
 
             {/* Sign In / Login Button */}
             <button

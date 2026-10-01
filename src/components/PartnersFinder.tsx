@@ -1251,14 +1251,14 @@ export const PartnersFinder: React.FC<PartnersFinderProps> = ({
                                 )}
                               </div>
 
-                              <div className="overflow-x-auto border border-slate-200 rounded-lg">
-                                <table className="w-full text-left border-collapse text-[11px]">
+                              <div className="overflow-x-auto border border-slate-300 rounded-lg">
+                                <table className="w-full text-left border-collapse text-[10px] leading-tight">
                                   <thead>
-                                    <tr className="bg-[#005A94] text-white font-semibold">
+                                    <tr className="bg-[#005A94] text-white font-bold uppercase tracking-wider text-[10px]">
                                       {msg.tableData.headers.map((header, hIdx) => (
                                         <th
                                           key={hIdx}
-                                          className="py-1.5 px-2.5 border-r border-white/15 last:border-r-0 whitespace-nowrap"
+                                          className="py-1 px-2 border-r border-white/20 last:border-r-0 whitespace-nowrap"
                                         >
                                           {header}
                                         </th>
@@ -1271,17 +1271,19 @@ export const PartnersFinder: React.FC<PartnersFinderProps> = ({
                                         key={rIdx}
                                         className={
                                           rIdx === 0
-                                            ? 'bg-emerald-50/40'
-                                            : 'hover:bg-slate-50'
+                                            ? 'bg-[#DDEBF7]/50'
+                                            : rIdx % 2 === 1
+                                              ? 'bg-slate-50/70 hover:bg-slate-100/80'
+                                              : 'bg-white hover:bg-slate-100/80'
                                         }
                                       >
                                         {row.map((cell, cIdx) => (
                                           <td
                                             key={cIdx}
-                                            className={`py-1.5 px-2.5 border-r border-slate-100 last:border-r-0 ${
+                                            className={`py-1 px-2 border-r border-slate-200 last:border-r-0 whitespace-nowrap ${
                                               cIdx === 0
-                                                ? 'font-bold text-slate-900'
-                                                : 'text-slate-700 font-mono tabular-nums'
+                                                ? 'font-bold text-slate-950'
+                                                : 'text-slate-900 font-semibold font-mono tabular-nums'
                                             }`}
                                           >
                                             {cell}

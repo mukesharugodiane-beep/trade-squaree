@@ -21,9 +21,10 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { PageId } from '../types/publicSite';
+import { CreateAccountDropdown, AccountCreationType } from '../components/CreateAccountDropdown';
 
 interface ForSmesPageProps {
-  onNavigate: (page: PageId) => void;
+  onNavigate: (page: PageId, accountType?: AccountCreationType) => void;
   onOpenSignIn: () => void;
 }
 
@@ -279,17 +280,17 @@ export const ForSmesPage: React.FC<ForSmesPageProps> = ({ onNavigate, onOpenSign
             Ready to participate in the pilot?
           </h3>
           <p className="text-xs text-[var(--text-sub)]">
-            Submit your enterprise TIN and RDB details to request pilot onboarding.
+            Create your Business or Partner account with your statutory credentials.
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => onNavigate('contact')}
-          className="px-5 py-2 bg-[var(--brand)] text-white text-xs font-bold rounded-[4px] hover:bg-[var(--brand-dark)] transition-colors cursor-pointer whitespace-nowrap"
-        >
-          Request Access Form
-        </button>
+        <CreateAccountDropdown
+          label="Create account"
+          onSelectAccountType={(type) => onNavigate('contact', type)}
+          variant="brand"
+          align="right"
+          dropUp
+        />
       </div>
     </div>
   );

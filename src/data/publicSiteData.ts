@@ -61,10 +61,17 @@ export const PAGES_META: Record<PageId, PageMeta> = {
   },
   contact: {
     id: 'contact',
-    title: 'Contact & Request Pilot Access | Trade Square MINICOM',
-    description: 'Submit your statutory RDB and TIN credentials to request pilot onboarding from the MINICOM Trade Desk.',
+    title: 'Contact & Create Account | Trade Square MINICOM',
+    description: 'Create your Business or Partner account and submit statutory credentials for onboarding with the MINICOM Trade Desk.',
     navLabelEn: 'Contact',
     navLabelRw: 'Twandikire'
+  },
+  login: {
+    id: 'login',
+    title: 'Login & Account Recovery | Trade Square MINICOM',
+    description: 'Sign in with your RDB/RRA TIN and password, verify your email code, or recover your account password via registered email.',
+    navLabelEn: 'Login',
+    navLabelRw: 'Injira'
   }
 };
 
@@ -140,6 +147,6 @@ export const FAQ_ITEMS = [
   },
   {
     question: 'How do I report a problem or incorrect company information?',
-    answer: 'You can report data inaccuracies or trade issues through the Contact and Request Access form on this portal or by notifying the MINICOM Trade Desk at the contact address (to be confirmed).'
+    answer: 'You can report data inaccuracies or trade issues through the Contact and Create Account form on this portal or by notifying the MINICOM Trade Desk at the contact address (to be confirmed).'
   }
 ] as const;

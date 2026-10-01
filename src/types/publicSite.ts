@@ -10,7 +10,8 @@ export type PageId =
   | 'trust-and-data'
   | 'pilot'
   | 'faq'
-  | 'contact';
+  | 'contact'
+  | 'login';
 
 export type PublicLanguage = 'en' | 'rw' | 'sw' | 'fr';
 

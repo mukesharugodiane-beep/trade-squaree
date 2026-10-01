@@ -1,0 +1,171 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated Trade Square enterprise or regional partner profile stored per Firebase Auth user.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Authentication UID of the account owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "accountType": {
+          "type": "string",
+          "description": "Account classification: Rwandan business or regional partner.",
+          "enum": ["business", "partner"],
+          "minLength": 7,
+          "maxLength": 20
+        },
+        "tin": {
+          "type": "string",
+          "description": "RRA 9-digit Tax Identification Number or regional partner tax ID.",
+          "minLength": 3,
+          "maxLength": 30,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "rdbNumber": {
+          "type": "string",
+          "description": "RDB enterprise registration code or regional incorporation number.",
+          "minLength": 2,
+          "maxLength": 40
+        },
+        "businessName": {
+          "type": "string",
+          "description": "Registered legal name of the enterprise or partner organization.",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "contactPerson": {
+          "type": "string",
+          "description": "Full name of the authorized managing director or trade representative.",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified corporate email address of the user.",
+          "minLength": 5,
+          "maxLength": 160
+        },
+        "phone": {
+          "type": "string",
+          "description": "Official contact phone number.",
+          "minLength": 5,
+          "maxLength": 40
+        },
+        "district": {
+          "type": "string",
+          "description": "Rwandan operational district or regional commercial city.",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "province": {
+          "type": "string",
+          "description": "Rwandan province or partner country/corridor.",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "commercialHub": {
+          "type": "string",
+          "description": "Special Economic Zone, industrial park, or OSBP trade hub.",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "offeringType": {
+          "type": "string",
+          "description": "Classification of trade offerings.",
+          "enum": ["Goods", "Services", "Goods & Services"],
+          "minLength": 5,
+          "maxLength": 30
+        },
+        "sectorCategory": {
+          "type": "string",
+          "description": "Primary industry or trade service sector.",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "specificOfferings": {
+          "type": "string",
+          "description": "Detailed description of exported goods or trade services.",
+          "minLength": 2,
+          "maxLength": 500
+        },
+        "selectedHsCode": {
+          "type": "string",
+          "description": "Primary Harmonized System (HS) commodity code.",
+          "minLength": 2,
+          "maxLength": 20
+        },
+        "products": {
+          "type": "array",
+          "description": "Bounded list of up to 10 HS codes in the enterprise portfolio.",
+          "maxLength": 10
+        },
+        "certifications": {
+          "type": "array",
+          "description": "Bounded list of up to 10 quality and standards certifications.",
+          "maxLength": 10
+        },
+        "monthlyCapacityKg": {
+          "type": "integer",
+          "description": "Monthly export or logistics capacity in kilograms."
+        },
+        "exWorksPriceRwf": {
+          "type": "integer",
+          "description": "Ex-works unit price in Rwandan Francs (RWF/kg)."
+        },
+        "savedPartnerIds": {
+          "type": "array",
+          "description": "Bounded list of up to 10 shortlisted regional partner IDs.",
+          "maxLength": 10
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was last updated."
+        }
+      },
+      "required": [
+        "uid",
+        "accountType",
+        "tin",
+        "rdbNumber",
+        "businessName",
+        "contactPerson",
+        "email",
+        "phone",
+        "district",
+        "province",
+        "commercialHub",
+        "offeringType",
+        "sectorCategory",
+        "specificOfferings",
+        "selectedHsCode",
+        "products",
+        "certifications",
+        "monthlyCapacityKg",
+        "exWorksPriceRwf",
+        "savedPartnerIds",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores the authenticated user's dynamic RDB/Partner enterprise profile, TIN, products, certifications, and saved shortlist partners. Strictly isolated per owner UID."
+    }
+  }
+}

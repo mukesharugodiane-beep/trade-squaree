@@ -550,7 +550,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
           {t.dueDiligenceNotice}
         </p>
 
-        <div className="absolute right-4 sm:right-8 bottom-6 sm:bottom-8 z-20">
+        <div className="absolute right-4 sm:right-8 bottom-20 sm:bottom-22 z-20">
           <button
             type="button"
             onClick={scrollToTop}

@@ -14,10 +14,8 @@ import {
   TrendingUp,
   BarChart3,
   User,
-  FileText,
   Building2,
   Globe,
-  ShieldCheck,
   Sliders,
   ChevronDown,
   ChevronsLeft,
@@ -28,6 +26,8 @@ import {
   LogOut,
   KanbanSquare,
   Settings,
+  Bell,
+  Search,
   Camera,
   Save
 } from 'lucide-react';
@@ -102,6 +102,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   onUpdateSme,
   shortlistCount,
   pendingIntroCount,
+  searchQuery,
+  onSearchChange,
   onOpenAssumptions,
   onExitPortal,
   opportunity,
@@ -113,9 +115,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState(true);
+  const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
   const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
   const [settingsTab, setSettingsTab] = useState<'identity' | 'business'>('identity');
-  const [exportSubmenuOpen, setExportSubmenuOpen] = useState(false);
   const [partnersSubmenuOpen, setPartnersSubmenuOpen] = useState(false);
 
   // Editable Profile & Business Settings State
@@ -137,6 +141,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [profileSavedToast, setProfileSavedToast] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const notificationsRef = useRef<HTMLDivElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mainScrollRef = useRef<HTMLElement>(null);
 
@@ -159,8 +165,15 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (dropdownRef.current && !dropdownRef.current.contains(target)) {
         setProfileDropdownOpen(false);
+      }
+      if (notificationsRef.current && !notificationsRef.current.contains(target)) {
+        setNotificationsOpen(false);
+      }
+      if (searchContainerRef.current && !searchContainerRef.current.contains(target)) {
+        setSearchDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -234,15 +247,67 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   };
 
   const activeAvatarSrc = sme.avatarUrl || editAvatarUrl || defaultProfileWoman;
+  const userFirstName = (sme.contactPerson || '').trim().split(/\s+/)[0] || 'Exporter';
+
+  // Filtered global search results for partners & screens
+  const trimmedSearch = (searchQuery || '').trim().toLowerCase();
+  const matchingPartners = trimmedSearch
+    ? (scoredPartners || [])
+        .filter(({ partner }) => {
+          const haystack = `${partner.name} ${partner.city} ${partner.country || 'Kenya'} ${partner.role}`.toLowerCase();
+          return haystack.includes(trimmedSearch);
+        })
+        .slice(0, 4)
+    : (scoredPartners || []).slice(0, 3);
+
+  const quickNavPages: { id: ActiveScreen; label: string; subtitle: string }[] = [
+    { id: 'dashboard-home', label: 'Dashboard', subtitle: 'Executive KPI summary & partner hub' },
+    { id: 'trends', label: 'Market Trends', subtitle: 'Supply-demand analytics & corridor margins' },
+    { id: 'partners-finder', label: 'Partners Finder', subtitle: 'AI regional buyer discovery & voice match' },
+    { id: 'pipeline', label: 'Opportunity Pipeline', subtitle: 'Active corridor deals & negotiations' }
+  ];
+
+  const matchingNavPages = trimmedSearch
+    ? quickNavPages.filter(
+        (p) =>
+          p.label.toLowerCase().includes(trimmedSearch) ||
+          p.subtitle.toLowerCase().includes(trimmedSearch)
+      )
+    : quickNavPages.slice(0, 3);
+
+  const notificationItems = [
+    {
+      id: 'notif-match',
+      title: `${shortlistCount} Verified Corridor Buyers Matched`,
+      detail: `Ready for HS ${opportunity?.productHs || sme.selectedHsCode} (${sme.monthlyCapacityKg.toLocaleString()} kg/mo capacity)`,
+      time: 'Just now',
+      screen: 'partners-finder' as ActiveScreen
+    },
+    {
+      id: 'notif-trends',
+      title: 'Northern Corridor Demand Update',
+      detail: 'Realtime-Venus detected strong buyer absorption via Gatuna–Malaba OSBP',
+      time: '12m ago',
+      screen: 'trends' as ActiveScreen
+    },
+    {
+      id: 'notif-pipeline',
+      title: `Trade Pipeline (${pendingIntroCount} Active)`,
+      detail: 'Track active bilateral partner introductions and deal stages',
+      time: '1h ago',
+      screen: 'pipeline' as ActiveScreen
+    }
+  ];
 
   return (
     <div className="h-screen overflow-hidden bg-[#F4F6F9] text-slate-800 flex flex-col font-sans antialiased">
       {/* =========================================================================
-          STICKY TOP HEADER BAR (Streamlined: Brand Left, Profile Right)
+          STICKY TOP HEADER BAR
+          Left: Brand Mark | Middle: Responsive Global Search | Right: Notification, Settings & First Name
           ========================================================================= */}
-      <header className="sticky top-0 z-40 shrink-0 w-full bg-[#F2F4F7] border-b border-slate-200/90 h-14 sm:h-16 px-3 sm:px-6 flex items-center justify-between gap-2 shadow-2xs">
+      <header className="sticky top-0 z-40 shrink-0 w-full bg-[#F2F4F7] border-b border-slate-200/90 h-14 sm:h-16 px-2.5 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 shadow-2xs">
         {/* Left: Mobile Menu Button + Trade Square / MINICOM Brand Mark */}
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 min-w-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 min-w-0">
           <button
             type="button"
             onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
@@ -262,107 +327,301 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 src={coatOfArmsSvg}
                 alt="Republic of Rwanda Coat of Arms"
                 referrerPolicy="no-referrer"
-                className="h-7 sm:h-8 w-auto object-contain shrink-0"
+                className="h-6 sm:h-8 w-auto object-contain shrink-0"
               />
-              <span className="text-sm sm:text-base font-extrabold tracking-tight text-[#005A94] leading-none whitespace-nowrap">
+              <span className="hidden xs:inline sm:inline text-xs sm:text-base font-extrabold tracking-tight text-[#005A94] leading-none whitespace-nowrap">
                 TRADE SQUARE
               </span>
             </div>
 
-            <div className="hidden sm:flex flex-col border-l border-[#005A94]/35 pl-2 py-0.5 text-[8px] font-semibold uppercase tracking-wider text-[#005A94] leading-tight">
+            <div className="hidden xl:flex flex-col border-l border-[#005A94]/35 pl-2 py-0.5 text-[8px] font-semibold uppercase tracking-wider text-[#005A94] leading-tight">
               <span>MINICOM RWANDA</span>
               <span>NORTHERN CORRIDOR PILOT</span>
             </div>
           </button>
         </div>
 
-        {/* Right: User Profile Picture Image + Name + Email + Chevron Dropdown */}
-        <div className="relative shrink-0" ref={dropdownRef}>
-          <button
-            type="button"
-            onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-            className="flex items-center gap-2 sm:gap-2.5 py-1 px-1.5 sm:px-2.5 rounded-lg hover:bg-slate-200/60 transition-colors cursor-pointer text-left"
-            aria-label="User Profile Menu"
-          >
-            {/* Circular Profile Picture Image with Online Status Dot */}
-            <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full shrink-0">
-              <img
-                src={activeAvatarSrc}
-                alt={sme.contactPerson}
-                className="w-full h-full rounded-full object-cover border-2 border-[#005A94] shadow-2xs"
-              />
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#1A8754] ring-2 ring-white" />
-            </div>
-
-            {/* Name and Email */}
-            <div className="hidden sm:flex flex-col leading-tight max-w-[150px] lg:max-w-[190px]">
-              <span className="text-xs font-bold text-slate-800 truncate">
-                {sme.contactPerson}
-              </span>
-              <span className="text-[11px] text-slate-500 truncate">
-                {sme.email}
-              </span>
-            </div>
-
-            <ChevronDown
-              className={`w-3.5 h-3.5 text-slate-500 shrink-0 transition-transform ${
-                profileDropdownOpen ? 'rotate-180' : ''
-              }`}
+        {/* Middle: Fully Responsive Global Search Bar */}
+        <div
+          ref={searchContainerRef}
+          className="relative flex-1 max-w-md min-w-[120px] mx-1 sm:mx-4"
+        >
+          <div className="relative flex items-center">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 sm:left-3 pointer-events-none shrink-0" />
+            <input
+              type="text"
+              value={searchQuery}
+              onFocus={() => setSearchDropdownOpen(true)}
+              onChange={(e) => {
+                onSearchChange(e.target.value);
+                setSearchDropdownOpen(true);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && matchingPartners.length > 0 && trimmedSearch) {
+                  setSearchDropdownOpen(false);
+                  if (onSelectPartnerDetail) {
+                    onSelectPartnerDetail(matchingPartners[0].partner);
+                  } else {
+                    handleNavClick('partners-finder');
+                  }
+                }
+                if (e.key === 'Escape') {
+                  setSearchDropdownOpen(false);
+                }
+              }}
+              placeholder="Search buyers, corridors, HS codes..."
+              aria-label="Global search"
+              className="w-full h-8 sm:h-9 pl-8 sm:pl-9 pr-7 rounded-lg bg-white border border-slate-300/90 text-[11px] sm:text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#005A94] focus:ring-2 focus:ring-[#005A94]/15 transition-all shadow-2xs"
             />
-          </button>
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  onSearchChange('');
+                  setSearchDropdownOpen(false);
+                }}
+                aria-label="Clear search"
+                className="absolute right-2 p-0.5 rounded text-slate-400 hover:text-slate-700 cursor-pointer"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
 
-          {/* Dropdown Menu: Shows Profile Summary, Profile Settings (Edit Profile), and Logout */}
-          {profileDropdownOpen && (
-            <div className="absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-lg shadow-xl py-1.5 z-50 text-xs text-slate-700">
-              {/* Top User Summary */}
-              <div className="px-3.5 py-2.5 border-b border-slate-100 flex items-center gap-2.5">
-                <img
-                  src={activeAvatarSrc}
-                  alt={sme.contactPerson}
-                  className="w-9 h-9 rounded-full object-cover border border-[#005A94]/40 shrink-0"
-                />
-                <div className="min-w-0">
-                  <div className="font-bold text-slate-900 text-xs truncate">
-                    {sme.contactPerson}
-                  </div>
-                  <div className="text-[11px] text-slate-500 truncate">
-                    {sme.email}
-                  </div>
-                  <div className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1 mt-0.5 truncate">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                    <span className="truncate">{sme.businessName.replace(' (sample)', '')}</span>
-                  </div>
+          {/* Interactive Global Search Results Dropdown */}
+          {searchDropdownOpen && (
+            <div className="absolute left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl py-2 z-50 text-xs max-h-80 overflow-y-auto">
+              {/* Matching Corridor Buyers */}
+              <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+                <span>{trimmedSearch ? 'Matching Corridor Buyers' : 'Top Verified Buyers'}</span>
+                <span className="font-mono">{matchingPartners.length}</span>
+              </div>
+              {matchingPartners.length > 0 ? (
+                <div className="divide-y divide-slate-100">
+                  {matchingPartners.map(({ partner, scoreBreakdown }) => (
+                    <button
+                      key={partner.id}
+                      type="button"
+                      onClick={() => {
+                        setSearchDropdownOpen(false);
+                        if (onSelectPartnerDetail) {
+                          onSelectPartnerDetail(partner);
+                        } else {
+                          handleNavClick('partners-finder');
+                        }
+                      }}
+                      className="w-full px-3 py-2 text-left hover:bg-[#DDEBF7]/40 flex items-center justify-between gap-2 transition-colors cursor-pointer"
+                    >
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-900 text-[11px] truncate">
+                          {partner.name.replace(' (sample)', '')}
+                        </div>
+                        <div className="text-[10px] text-slate-500 truncate">
+                          {partner.city}, {partner.country || 'Kenya'} · {partner.role}
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-mono font-bold text-[#005A94] shrink-0">
+                        {scoreBreakdown?.totalScore ?? 88}% Match
+                      </span>
+                    </button>
+                  ))}
                 </div>
-              </div>
+              ) : (
+                <div className="px-3 py-2 text-[11px] text-slate-500">
+                  No direct buyer matches for "{searchQuery}".
+                </div>
+              )}
 
-              {/* Menu Options: Profile Settings & Logout */}
-              <div className="py-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setProfileDropdownOpen(false);
-                    setIsProfileSettingsOpen(true);
-                  }}
-                  className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-[#DDEBF7]/50 hover:text-[#005A94] font-semibold flex items-center gap-2.5 transition-colors cursor-pointer"
-                >
-                  <Settings className="w-4 h-4 text-[#005A94]" />
-                  <span>Profile Settings</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setProfileDropdownOpen(false);
-                    onExitPortal();
-                  }}
-                  className="w-full text-left px-3.5 py-2 text-xs text-red-600 hover:bg-red-50 font-semibold flex items-center gap-2.5 transition-colors cursor-pointer"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
-                </button>
-              </div>
+              {/* Quick Workspace Navigation */}
+              {matchingNavPages.length > 0 && (
+                <>
+                  <div className="px-3 pt-2 pb-1 mt-1 border-t border-slate-100 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    Workspace Views
+                  </div>
+                  {matchingNavPages.map((nav) => (
+                    <button
+                      key={nav.id}
+                      type="button"
+                      onClick={() => {
+                        setSearchDropdownOpen(false);
+                        handleNavClick(nav.id);
+                      }}
+                      className="w-full px-3 py-1.5 text-left hover:bg-slate-50 flex items-center justify-between gap-2 transition-colors cursor-pointer"
+                    >
+                      <span className="font-semibold text-[#005A94] text-[11px] truncate">
+                        {nav.label}
+                      </span>
+                      <span className="text-[10px] text-slate-400 truncate">
+                        {nav.subtitle}
+                      </span>
+                    </button>
+                  ))}
+                </>
+              )}
             </div>
           )}
+        </div>
+
+        {/* Right: Notification Icon + Settings Icon + User Avatar & First Name Only */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          {/* 1. Notification Icon & Dropdown */}
+          <div className="relative" ref={notificationsRef}>
+            <button
+              type="button"
+              onClick={() => {
+                setNotificationsOpen(!notificationsOpen);
+                setProfileDropdownOpen(false);
+              }}
+              className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-slate-200/90 bg-white hover:bg-[#DDEBF7]/50 hover:border-[#005A94]/40 text-slate-700 hover:text-[#005A94] flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
+              title="Notifications"
+              aria-label="Notifications"
+            >
+              <Bell className="w-4 h-4" />
+              {unreadNotifications && (
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#1A8754] ring-2 ring-white" />
+              )}
+            </button>
+
+            {notificationsOpen && (
+              <div className="absolute right-0 mt-1.5 w-72 sm:w-80 bg-white border border-slate-200 rounded-xl shadow-xl py-2 z-50 text-xs">
+                <div className="px-3.5 py-2 border-b border-slate-100 flex items-center justify-between">
+                  <span className="font-bold text-slate-900 text-xs">Notifications</span>
+                  <button
+                    type="button"
+                    onClick={() => setUnreadNotifications(false)}
+                    className="text-[10px] font-semibold text-[#005A94] hover:underline cursor-pointer"
+                  >
+                    Mark all read
+                  </button>
+                </div>
+                <div className="divide-y divide-slate-100 max-h-72 overflow-y-auto">
+                  {notificationItems.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        setNotificationsOpen(false);
+                        setUnreadNotifications(false);
+                        handleNavClick(item.screen);
+                      }}
+                      className="w-full px-3.5 py-2.5 text-left hover:bg-[#F8FAFC] transition-colors cursor-pointer block"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-bold text-slate-900 text-[11px] truncate">
+                          {item.title}
+                        </span>
+                        <span className="text-[9.5px] font-mono text-slate-400 shrink-0">
+                          {item.time}
+                        </span>
+                      </div>
+                      <p className="text-[10.5px] text-slate-600 mt-0.5 leading-snug">
+                        {item.detail}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 2. Settings Icon Button */}
+          <button
+            type="button"
+            onClick={() => {
+              setProfileDropdownOpen(false);
+              setNotificationsOpen(false);
+              setIsProfileSettingsOpen(true);
+            }}
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-slate-200/90 bg-white hover:bg-[#DDEBF7]/50 hover:border-[#005A94]/40 text-slate-700 hover:text-[#005A94] flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
+            title="Profile & Business Settings"
+            aria-label="Open Settings"
+          >
+            <Settings className="w-4 h-4" />
+          </button>
+
+          {/* 3. User Profile Trigger: Avatar + First Name ONLY (Full Username & Email Hidden) */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => {
+                setProfileDropdownOpen(!profileDropdownOpen);
+                setNotificationsOpen(false);
+              }}
+              className="flex items-center gap-1.5 sm:gap-2 py-1 px-1.5 sm:px-2.5 rounded-lg hover:bg-slate-200/60 transition-colors cursor-pointer text-left"
+              aria-label="User Profile Menu"
+            >
+              {/* Circular Profile Picture Image with Online Status Dot */}
+              <div className="relative w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full shrink-0">
+                <img
+                  src={activeAvatarSrc}
+                  alt={userFirstName}
+                  className="w-full h-full rounded-full object-cover border-2 border-[#005A94] shadow-2xs"
+                />
+                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#1A8754] ring-2 ring-white" />
+              </div>
+
+              {/* First Name Only (Full Username and Email Hidden in Navbar) */}
+              <span className="text-xs font-bold text-slate-800 truncate max-w-[80px] sm:max-w-[110px]">
+                {userFirstName}
+              </span>
+
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-slate-500 shrink-0 transition-transform ${
+                  profileDropdownOpen ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+
+            {/* Dropdown Menu: Shows First Name & Company, Profile Settings, and Logout */}
+            {profileDropdownOpen && (
+              <div className="absolute right-0 mt-1.5 w-52 bg-white border border-slate-200 rounded-lg shadow-xl py-1.5 z-50 text-xs text-slate-700">
+                {/* Top User Summary */}
+                <div className="px-3.5 py-2 border-b border-slate-100 flex items-center gap-2.5">
+                  <img
+                    src={activeAvatarSrc}
+                    alt={userFirstName}
+                    className="w-8 h-8 rounded-full object-cover border border-[#005A94]/40 shrink-0"
+                  />
+                  <div className="min-w-0">
+                    <div className="font-bold text-slate-900 text-xs truncate">
+                      {userFirstName}
+                    </div>
+                    <div className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1 mt-0.5 truncate">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                      <span className="truncate">{sme.businessName.replace(' (sample)', '')}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Menu Options: Profile Settings & Logout */}
+                <div className="py-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProfileDropdownOpen(false);
+                      setIsProfileSettingsOpen(true);
+                    }}
+                    className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-[#DDEBF7]/50 hover:text-[#005A94] font-semibold flex items-center gap-2.5 transition-colors cursor-pointer"
+                  >
+                    <Settings className="w-4 h-4 text-[#005A94]" />
+                    <span>Profile Settings</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProfileDropdownOpen(false);
+                      onExitPortal();
+                    }}
+                    className="w-full text-left px-3.5 py-2 text-xs text-red-600 hover:bg-red-50 font-semibold flex items-center gap-2.5 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -457,79 +716,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 {!sidebarCollapsed && <span className="truncate">Partners Finder</span>}
               </button>
 
-              {/* 2. Export Opportunity & Shortlist */}
-              <div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (sidebarCollapsed) {
-                      handleNavClick('export-form');
-                    } else {
-                      setExportSubmenuOpen(!exportSubmenuOpen);
-                      handleNavClick('export-form');
-                    }
-                  }}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-xs transition-colors cursor-pointer ${
-                    activeScreen === 'export-form' ||
-                    activeScreen === 'shortlist' ||
-                    activeScreen === 'match-detail'
-                      ? 'bg-[#2673A6] text-white font-semibold'
-                      : 'text-white/90 hover:bg-white/10 font-medium'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <FileText className="w-3.5 h-3.5 shrink-0 text-white" />
-                    {!sidebarCollapsed && <span className="truncate">Export Opportunity</span>}
-                  </div>
-                  {!sidebarCollapsed && (
-                    <ChevronDown
-                      className={`w-3.5 h-3.5 text-white/80 transition-transform shrink-0 ${
-                        exportSubmenuOpen ||
-                        activeScreen === 'shortlist' ||
-                        activeScreen === 'match-detail'
-                          ? 'rotate-180'
-                          : ''
-                      }`}
-                    />
-                  )}
-                </button>
-
-                {!sidebarCollapsed &&
-                  (exportSubmenuOpen ||
-                    activeScreen === 'export-form' ||
-                    activeScreen === 'shortlist' ||
-                    activeScreen === 'match-detail') && (
-                    <div className="mt-1 ml-6 pl-2.5 border-l border-white/20 space-y-0.5">
-                      <button
-                        type="button"
-                        onClick={() => handleNavClick('export-form')}
-                        className={`w-full text-left px-2.5 py-1.5 rounded text-[11px] transition-colors cursor-pointer ${
-                          activeScreen === 'export-form'
-                            ? 'text-white font-semibold bg-white/10'
-                            : 'text-white/80 hover:text-white hover:bg-white/5'
-                        }`}
-                      >
-                        Opportunity Parameters
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleNavClick('shortlist')}
-                        className={`w-full text-left px-2.5 py-1.5 rounded text-[11px] flex items-center justify-between transition-colors cursor-pointer ${
-                          activeScreen === 'shortlist' || activeScreen === 'match-detail'
-                            ? 'text-white font-semibold bg-white/10'
-                            : 'text-white/80 hover:text-white hover:bg-white/5'
-                        }`}
-                      >
-                        <span>Partner Shortlist</span>
-                        <span className="text-[10px] font-mono tabular-nums text-white/90">
-                          ({shortlistCount})
-                        </span>
-                      </button>
-                    </div>
-                  )}
-              </div>
-
-              {/* 4. Trade Pipeline & Officer View */}
+              {/* 4. Trade Pipeline */}
               <div>
                 <button
                   type="button"
@@ -542,7 +729,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     }
                   }}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-xs transition-colors cursor-pointer ${
-                    activeScreen === 'pipeline' || activeScreen === 'officer-view'
+                    activeScreen === 'pipeline'
                       ? 'bg-[#2673A6] text-white font-semibold'
                       : 'text-white/90 hover:bg-white/10 font-medium'
                   }`}
@@ -554,9 +741,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   {!sidebarCollapsed && (
                     <ChevronDown
                       className={`w-3.5 h-3.5 text-white/80 transition-transform shrink-0 ${
-                        partnersSubmenuOpen ||
-                        activeScreen === 'pipeline' ||
-                        activeScreen === 'officer-view'
+                        partnersSubmenuOpen || activeScreen === 'pipeline'
                           ? 'rotate-180'
                           : ''
                       }`}
@@ -565,9 +750,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 </button>
 
                 {!sidebarCollapsed &&
-                  (partnersSubmenuOpen ||
-                    activeScreen === 'pipeline' ||
-                    activeScreen === 'officer-view') && (
+                  (partnersSubmenuOpen || activeScreen === 'pipeline') && (
                     <div className="mt-1 ml-6 pl-2.5 border-l border-white/20 space-y-0.5">
                       <button
                         type="button"
@@ -580,25 +763,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                       >
                         <KanbanSquare className="w-3 h-3 shrink-0" />
                         <span className="truncate">Opportunity Pipeline</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleNavClick('officer-view')}
-                        className={`w-full text-left px-2.5 py-1.5 rounded text-[11px] flex items-center justify-between transition-colors cursor-pointer ${
-                          activeScreen === 'officer-view'
-                            ? 'text-white font-semibold bg-white/10'
-                            : 'text-white/80 hover:text-white hover:bg-white/5'
-                        }`}
-                      >
-                        <span className="flex items-center gap-1.5 truncate">
-                          <ShieldCheck className="w-3 h-3 shrink-0" />
-                          <span className="truncate">MINICOM Officer View</span>
-                        </span>
-                        {pendingIntroCount > 0 && (
-                          <span className="text-[10px] font-mono tabular-nums text-amber-300 font-bold">
-                            ({pendingIntroCount})
-                          </span>
-                        )}
                       </button>
                     </div>
                   )}

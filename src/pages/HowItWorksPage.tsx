@@ -25,9 +25,10 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { PageId } from '../types/publicSite';
+import { CreateAccountDropdown, AccountCreationType } from '../components/CreateAccountDropdown';
 
 interface HowItWorksPageProps {
-  onNavigate: (page: PageId) => void;
+  onNavigate: (page: PageId, accountType?: AccountCreationType) => void;
   onOpenSignIn: () => void;
 }
 
@@ -270,7 +271,7 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate, onOp
         <p className="text-xs text-[var(--text-body)] max-w-lg mx-auto">
           Rwandan SMEs with valid RDB and TIN credentials can apply for active participation in the Northern Corridor pilot.
         </p>
-        <div className="pt-2 flex justify-center gap-3">
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <button
             type="button"
             onClick={onOpenSignIn}
@@ -278,13 +279,13 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate, onOp
           >
             Sign in to Pilot
           </button>
-          <button
-            type="button"
-            onClick={() => onNavigate('contact')}
-            className="px-4 py-2 bg-white text-[var(--text-body)] border border-[var(--gray-300)] text-xs font-semibold rounded-[4px] hover:bg-[var(--gray-100)] cursor-pointer"
-          >
-            Request Pilot Access
-          </button>
+          <CreateAccountDropdown
+            label="Create account"
+            onSelectAccountType={(type) => onNavigate('contact', type)}
+            variant="white-rect"
+            align="center"
+            dropUp
+          />
         </div>
       </div>
     </div>

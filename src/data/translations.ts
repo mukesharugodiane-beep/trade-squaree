@@ -125,7 +125,7 @@ export const TRANSLATIONS: Record<'en' | 'rw' | 'sw' | 'fr', TranslationDictiona
     navContact: 'Contact',
     navMore: 'More',
     btnSignIn: 'Login',
-    btnRequestAccess: 'Request access',
+    btnRequestAccess: 'Create account',
     mobileMenu: 'Navigation Menu',
 
     // Hero Section
@@ -244,7 +244,7 @@ export const TRANSLATIONS: Record<'en' | 'rw' | 'sw' | 'fr', TranslationDictiona
     navContact: 'Twandikire',
     navMore: 'Ibindi',
     btnSignIn: 'Injira',
-    btnRequestAccess: 'Saba Kwinjira',
+    btnRequestAccess: 'Fungura Konti',
     mobileMenu: 'Ibikubiyemo',
 
     // Hero Section
@@ -363,7 +363,7 @@ export const TRANSLATIONS: Record<'en' | 'rw' | 'sw' | 'fr', TranslationDictiona
     navContact: 'Wasiliana Nasi',
     navMore: 'Zaidi',
     btnSignIn: 'Ingia',
-    btnRequestAccess: 'Omba Kuingia',
+    btnRequestAccess: 'Fungua Akaunti',
     mobileMenu: 'Menyu ya Urambazaji',
 
     // Hero Section
@@ -482,7 +482,7 @@ export const TRANSLATIONS: Record<'en' | 'rw' | 'sw' | 'fr', TranslationDictiona
     navContact: 'Contact',
     navMore: 'Plus',
     btnSignIn: 'Connexion',
-    btnRequestAccess: 'Demander l\'accès',
+    btnRequestAccess: 'Créer un compte',
     mobileMenu: 'Menu de Navigation',
 
     // Hero Section

@@ -174,7 +174,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({
 
         {/* CARD 2: PENDING CONNECTIONS */}
         <div
-          onClick={() => onNavigateScreen('officer-view')}
+          onClick={() => onNavigateScreen('pipeline')}
           className="bg-white border border-slate-200/90 hover:border-[#005A94]/50 rounded-lg p-4 shadow-2xs transition-all cursor-pointer flex flex-col justify-between group"
         >
           <div className="flex items-start justify-between gap-3">

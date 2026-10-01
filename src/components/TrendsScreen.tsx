@@ -572,26 +572,26 @@ export const TrendsScreen: React.FC<TrendsScreenProps> = ({
               </div>
             </div>
 
-            {/* Inner Rounded Table matching Reference Image */}
-            <div className="border border-slate-200/80 rounded-lg overflow-x-auto">
+            {/* Inner Compact High-Contrast Table */}
+            <div className="border border-slate-300 rounded-lg overflow-x-auto">
               {tableTab === 'corridors' ? (
-                <table className="w-full text-left border-collapse text-xs">
+                <table className="w-full text-left border-collapse text-[10px] leading-tight">
                   <thead>
-                    <tr className="bg-[#F8FAFC] border-b border-slate-200/80 text-[11px] font-medium text-slate-600">
-                      <th className="py-2.5 px-3.5 border-r border-slate-200/60">
+                    <tr className="bg-slate-100 border-b border-slate-300 text-[10px] font-bold uppercase tracking-wider text-slate-950">
+                      <th className="py-1.5 px-2.5 border-r border-slate-300/80">
                         Corridor (OSBP)
                       </th>
-                      <th className="py-2.5 px-3.5 border-r border-slate-200/60">
+                      <th className="py-1.5 px-2.5 border-r border-slate-300/80">
                         Supply Coverage Rate
                       </th>
-                      <th className="py-2.5 px-3.5 border-r border-slate-200/60">
+                      <th className="py-1.5 px-2.5 border-r border-slate-300/80">
                         Net Margin Rate
                       </th>
-                      <th className="py-2.5 px-3.5">Verified Buyers</th>
+                      <th className="py-1.5 px-2.5">Verified Buyers</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200/70">
-                    {venusViz.corridorBars.map((bar) => {
+                  <tbody className="divide-y divide-slate-200">
+                    {venusViz.corridorBars.map((bar, idx) => {
                       const badge = CORRIDOR_BADGE_STYLES[bar.country];
                       const isSelected = bar.country === venusViz.activeCorridor;
                       const marginPct = Math.max(
@@ -607,43 +607,45 @@ export const TrendsScreen: React.FC<TrendsScreenProps> = ({
                           onClick={() => venusViz.setActiveCorridor(bar.country)}
                           className={`transition-colors cursor-pointer ${
                             isSelected
-                              ? 'bg-[#DDEBF7]/35'
-                              : 'hover:bg-slate-50/90'
+                              ? 'bg-[#DDEBF7]/60'
+                              : idx % 2 === 1
+                                ? 'bg-slate-50/70 hover:bg-slate-100/80'
+                                : 'bg-white hover:bg-slate-100/80'
                           }`}
                         >
-                          <td className="py-2.5 px-3.5 border-r border-slate-100">
-                            <div className="flex items-center gap-2.5">
+                          <td className="py-1.5 px-2.5 border-r border-slate-200">
+                            <div className="flex items-center gap-2">
                               <span
-                                className={`w-7 h-7 rounded-full border ${badge.bg} ${badge.text} ${badge.border} flex items-center justify-center text-[10px] font-bold shrink-0`}
+                                className={`w-5 h-5 rounded-full border ${badge.bg} ${badge.text} ${badge.border} flex items-center justify-center text-[9px] font-bold shrink-0`}
                               >
                                 {badge.code}
                               </span>
                               <div className="min-w-0">
-                                <div className="font-semibold text-slate-900 truncate">
+                                <div className="font-bold text-slate-950 truncate">
                                   {bar.country} Corridor
                                 </div>
-                                <div className="text-[10px] text-slate-500 truncate">
+                                <div className="text-[9px] text-slate-600 truncate">
                                   Via {bar.borderPost} · {bar.avgBuyerOfferRwf.toLocaleString()} RWF/kg
                                 </div>
                               </div>
                             </div>
                           </td>
-                          <td className="py-2.5 px-3.5 border-r border-slate-100 font-mono text-slate-800">
+                          <td className="py-1.5 px-2.5 border-r border-slate-200 font-mono font-bold text-slate-950 tabular-nums whitespace-nowrap">
                             {bar.coverageRatioPct}%
                           </td>
-                          <td className="py-2.5 px-3.5 border-r border-slate-100 font-mono">
+                          <td className="py-1.5 px-2.5 border-r border-slate-200 font-mono tabular-nums whitespace-nowrap">
                             <span
                               className={
                                 bar.netMarginRwfPerKg >= 0
-                                  ? 'text-[#1A8754] font-semibold'
-                                  : 'text-amber-700 font-semibold'
+                                  ? 'text-[#005A94] font-bold'
+                                  : 'text-amber-900 font-bold'
                               }
                             >
                               {marginPct}% ({bar.netMarginRwfPerKg >= 0 ? '+' : ''}
                               {bar.netMarginRwfPerKg} RWF)
                             </span>
                           </td>
-                          <td className="py-2.5 px-3.5 font-mono text-slate-800">
+                          <td className="py-1.5 px-2.5 font-mono font-extrabold text-slate-950 tabular-nums whitespace-nowrap">
                             {bar.verifiedBuyersCount}
                           </td>
                         </tr>
@@ -652,22 +654,22 @@ export const TrendsScreen: React.FC<TrendsScreenProps> = ({
                   </tbody>
                 </table>
               ) : (
-                <table className="w-full text-left border-collapse text-xs">
+                <table className="w-full text-left border-collapse text-[10px] leading-tight">
                   <thead>
-                    <tr className="bg-[#F8FAFC] border-b border-slate-200/80 text-[11px] font-medium text-slate-600">
-                      <th className="py-2.5 px-3.5 border-r border-slate-200/60">
+                    <tr className="bg-slate-100 border-b border-slate-300 text-[10px] font-bold uppercase tracking-wider text-slate-950">
+                      <th className="py-1.5 px-2.5 border-r border-slate-300/80">
                         Partner
                       </th>
-                      <th className="py-2.5 px-3.5 border-r border-slate-200/60">
+                      <th className="py-1.5 px-2.5 border-r border-slate-300/80">
                         On-Time Settlement
                       </th>
-                      <th className="py-2.5 px-3.5 border-r border-slate-200/60">
+                      <th className="py-1.5 px-2.5 border-r border-slate-300/80">
                         Buyer Offer Rate
                       </th>
-                      <th className="py-2.5 px-3.5">OSBP Crossings</th>
+                      <th className="py-1.5 px-2.5">OSBP Crossings</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200/70">
+                  <tbody className="divide-y divide-slate-200">
                     {topPartnerPerformers.map((p, idx) => {
                       const badge =
                         CORRIDOR_BADGE_STYLES[p.country] || CORRIDOR_BADGE_STYLES.Kenya;
@@ -675,36 +677,40 @@ export const TrendsScreen: React.FC<TrendsScreenProps> = ({
                         <tr
                           key={p.id}
                           onClick={() => onNavigateScreen('partners-finder')}
-                          className="hover:bg-slate-50/90 transition-colors cursor-pointer"
+                          className={`transition-colors cursor-pointer ${
+                            idx % 2 === 1
+                              ? 'bg-slate-50/70 hover:bg-slate-100/80'
+                              : 'bg-white hover:bg-slate-100/80'
+                          }`}
                         >
-                          <td className="py-2.5 px-3.5 border-r border-slate-100">
-                            <div className="flex items-center gap-2.5">
+                          <td className="py-1.5 px-2.5 border-r border-slate-200">
+                            <div className="flex items-center gap-2">
                               <span
-                                className={`w-7 h-7 rounded-full border ${
+                                className={`w-5 h-5 rounded-full border ${
                                   idx % 2 === 0
                                     ? 'bg-[#DDEBF7] text-[#005A94] border-[#005A94]/25'
                                     : `${badge.bg} ${badge.text} ${badge.border}`
-                                } flex items-center justify-center text-[10px] font-bold shrink-0`}
+                                } flex items-center justify-center text-[9px] font-bold shrink-0`}
                               >
                                 {p.initials}
                               </span>
                               <div className="min-w-0">
-                                <div className="font-semibold text-slate-900 truncate">
+                                <div className="font-bold text-slate-950 truncate">
                                   {p.name}
                                 </div>
-                                <div className="text-[10px] text-slate-500 truncate">
+                                <div className="text-[9px] text-slate-600 truncate">
                                   {p.city}, {p.country}
                                 </div>
                               </div>
                             </div>
                           </td>
-                          <td className="py-2.5 px-3.5 border-r border-slate-100 font-mono text-slate-800">
+                          <td className="py-1.5 px-2.5 border-r border-slate-200 font-mono font-bold text-slate-950 tabular-nums whitespace-nowrap">
                             {p.onTimeRate}
                           </td>
-                          <td className="py-2.5 px-3.5 border-r border-slate-100 font-mono text-[#1A8754] font-semibold">
+                          <td className="py-1.5 px-2.5 border-r border-slate-200 font-mono text-[#005A94] font-bold tabular-nums whitespace-nowrap">
                             {p.offerRwf}
                           </td>
-                          <td className="py-2.5 px-3.5 font-mono text-slate-800">
+                          <td className="py-1.5 px-2.5 font-mono font-extrabold text-slate-950 tabular-nums whitespace-nowrap">
                             {p.crossings}
                           </td>
                         </tr>
@@ -1331,35 +1337,39 @@ export const TrendsScreen: React.FC<TrendsScreenProps> = ({
             )}
           </div>
 
-          <div className="overflow-x-auto border border-slate-200/85 rounded-lg">
-            <table className="w-full text-left border-collapse text-xs">
+          <div className="overflow-x-auto border border-slate-300 rounded-lg">
+            <table className="w-full text-left border-collapse text-[10px] leading-tight">
               <thead>
-                <tr className="bg-[#005A94] text-white font-semibold">
+                <tr className="bg-[#005A94] text-white font-bold uppercase tracking-wider text-[10px]">
                   {venusViz.structuredTable.headers.map((header, idx) => (
                     <th
                       key={idx}
-                      className="py-2.5 px-3.5 border-r border-white/15 last:border-r-0 whitespace-nowrap"
+                      className="py-1.5 px-2.5 border-r border-white/20 last:border-r-0 whitespace-nowrap"
                     >
                       {header}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200/80">
+              <tbody className="divide-y divide-slate-200">
                 {venusViz.structuredTable.rows.map((row, rIdx) => (
                   <tr
                     key={rIdx}
                     className={
-                      rIdx === 0 ? 'bg-emerald-50/40' : 'hover:bg-slate-50'
+                      rIdx === 0
+                        ? 'bg-[#DDEBF7]/50'
+                        : rIdx % 2 === 1
+                          ? 'bg-slate-50/70 hover:bg-slate-100/80'
+                          : 'bg-white hover:bg-slate-100/80'
                     }
                   >
                     {row.map((cell, cIdx) => (
                       <td
                         key={cIdx}
-                        className={`py-2 px-3.5 border-r border-slate-100 last:border-r-0 ${
+                        className={`py-1.5 px-2.5 border-r border-slate-200 last:border-r-0 whitespace-nowrap ${
                           cIdx === 0
-                            ? 'font-bold text-slate-900'
-                            : 'text-slate-700 font-mono tabular-nums'
+                            ? 'font-bold text-slate-950'
+                            : 'text-slate-900 font-semibold font-mono tabular-nums'
                         }`}
                       >
                         {cell}
