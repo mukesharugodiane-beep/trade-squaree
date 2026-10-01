@@ -70,6 +70,22 @@ export const HS_PRODUCTS: HSProduct[] = [
     unit: 'kg',
     defaultPriceRwfPerKg: 2850,
     typicalMonthlyKg: 15000
+  },
+  {
+    hsCode: '9901',
+    name: 'Cross-Border Logistics, Cold-Chain & Customs Clearing Services',
+    category: 'B2B Trade & Logistics Services',
+    unit: 'contract',
+    defaultPriceRwfPerKg: 1250,
+    typicalMonthlyKg: 50
+  },
+  {
+    hsCode: '9902',
+    name: 'Digital Supply-Chain, FinTech & Commercial Advisory Services',
+    category: 'B2B Professional & Tech Services',
+    unit: 'project',
+    defaultPriceRwfPerKg: 2400,
+    typicalMonthlyKg: 20
   }
 ];
 
@@ -1322,6 +1338,116 @@ export const SEED_KENYAN_PARTNERS: KenyanPartner[] = [
         status: 'Verified',
         documentRef: 'TRA-RUS-2026-5520',
         summary: 'Cleared 14 tonnes of Rwandan specialty Arabica coffee and highland tea via Rusumo OSBP.'
+      }
+    ]
+  },
+  {
+    id: 'kp-19',
+    name: 'Nairobi & Mombasa Corridor Cold-Chain & Customs Logistics Group Ltd (sample)',
+    city: 'Nairobi',
+    country: 'Kenya',
+    role: 'Distributor',
+    evidenceLabel: 'Known trade activity',
+    source: 'NCTTCA Corridor Logistics Registry & KRA Authorized Economic Operator Log',
+    updatedDate: '02 Sep 2026',
+    oneLineReason: 'Premier regional B2B logistics, bonded warehousing, and digital customs clearing partner contracting Rwandan fleet, IT, and trade-service providers across the Northern Corridor.',
+    stillToVerify: [
+      'Bilateral SLA uptime & cold-chain telemetry API integration',
+      'ECTS (Electronic Cargo Tracking System) regional bonding terms'
+    ],
+    handledProducts: [
+      {
+        hsCode: '9901',
+        productName: 'Cross-Border Logistics, Cold-Chain & Customs Clearing Services',
+        minVolumeKgMonth: 1,
+        maxVolumeKgMonth: 500,
+        targetBuyPriceKesPerKg: 185
+      },
+      {
+        hsCode: '9902',
+        productName: 'Digital Supply-Chain, FinTech & Commercial Advisory Services',
+        minVolumeKgMonth: 1,
+        maxVolumeKgMonth: 250,
+        targetBuyPriceKesPerKg: 340
+      }
+    ],
+    acceptedCertifications: ['RSB S-Mark', 'HACCP'],
+    contact: {
+      person: 'Eng. Victor Omondi Otieno',
+      phone: '+254 720 619 400',
+      email: 'partnerships@corridorlogistics.co.ke (sample)',
+      address: 'JKIA Cargo Village & Inland Container Depot Rd, Embakasi, Nairobi'
+    },
+    kraPin: 'P051774829L',
+    corridorExperience: {
+      gatunaMalabaCrossingsCount: 88,
+      averageClearanceDays: 0.8,
+      lastShipmentDate: '01 Sep 2026',
+      onTimePaymentRatePct: 99,
+      yearsInCorridor: 9
+    },
+    evidenceRecords: [
+      {
+        source: 'Northern Corridor Transit & Transport Coordination Authority (NCTTCA)',
+        date: '01 Sep 2026',
+        status: 'Verified',
+        documentRef: 'NCTTCA-AEO-2026-884',
+        summary: 'Authorized Economic Operator (AEO) managing 88 cross-border service & logistics contracts between Kigali, Kampala, and Nairobi.'
+      }
+    ]
+  },
+  {
+    id: 'kp-20',
+    name: 'Great Lakes Enterprise FinTech & B2B Trade Services Hub SARL (sample)',
+    city: 'Bujumbura',
+    country: 'Burundi',
+    role: 'Buyer',
+    evidenceLabel: 'Trade Square registered',
+    source: 'EAC Digital Trade & Cross-Border Service Enterprise Registry',
+    updatedDate: '01 Sep 2026',
+    oneLineReason: 'Active regional procurer of Rwandan B2B software, cross-border payment integration, quality testing, and commercial advisory services across Burundi and Eastern DRC.',
+    stillToVerify: [
+      'Service-level milestone billing schedule in USD / RWF via PAPSS',
+      'Cross-border withholding tax exemption under EAC Double Taxation Agreement'
+    ],
+    handledProducts: [
+      {
+        hsCode: '9902',
+        productName: 'Digital Supply-Chain, FinTech & Commercial Advisory Services',
+        minVolumeKgMonth: 1,
+        maxVolumeKgMonth: 200,
+        targetBuyPriceKesPerKg: 365
+      },
+      {
+        hsCode: '9901',
+        productName: 'Cross-Border Logistics, Cold-Chain & Customs Clearing Services',
+        minVolumeKgMonth: 1,
+        maxVolumeKgMonth: 300,
+        targetBuyPriceKesPerKg: 175
+      }
+    ],
+    acceptedCertifications: ['RSB S-Mark'],
+    contact: {
+      person: 'Clarisse Niyonzima',
+      phone: '+257 79 441 802',
+      email: 'services@greatlakestradehub.bi (sample)',
+      address: 'Boulevard de l’Uprona, Immeuble Kaze, Bujumbura'
+    },
+    kraPin: 'NIF-400883920S',
+    corridorExperience: {
+      gatunaMalabaCrossingsCount: 46,
+      averageClearanceDays: 0.6,
+      lastShipmentDate: '29 Aug 2026',
+      onTimePaymentRatePct: 98,
+      yearsInCorridor: 6
+    },
+    evidenceRecords: [
+      {
+        source: 'EAC Trade in Services & PAPSS Settlement Ledger',
+        date: '29 Aug 2026',
+        status: 'Verified',
+        documentRef: 'EAC-SRV-2026-312',
+        summary: 'Completed 46 cross-border B2B service & technology contracts with Rwandan enterprises with 98% on-time milestone settlement.'
       }
     ]
   }

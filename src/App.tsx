@@ -56,6 +56,7 @@ import { calculateMatchScore, sortAndFilterShortlist } from './utils/scoring';
 import { Navigation } from './components/Navigation';
 import { DashboardLayout } from './components/DashboardLayout';
 import { DashboardHome } from './components/DashboardHome';
+import { TrendsScreen } from './components/TrendsScreen';
 import { PartnersFinder } from './components/PartnersFinder';
 import { ProfileScreen } from './components/ProfileScreen';
 import { ExportFormScreen } from './components/ExportFormScreen';
@@ -253,6 +254,8 @@ export default function App() {
             <DashboardHome
               sme={activeSme}
               opportunity={opportunity}
+              partners={partners}
+              assumptions={assumptions}
               scoredPartners={scoredPartners}
               savedPartnerIds={savedPartnerIds}
               pipelineItems={pipelineItems}
@@ -274,6 +277,17 @@ export default function App() {
                 setTargetIntroPartner(partner);
                 setIsIntroModalOpen(true);
               }}
+              onNavigateScreen={setPortalScreen}
+              onOpenAssumptions={() => setIsAssumptionsModalOpen(true)}
+            />
+          )}
+
+          {portalScreen === 'trends' && (
+            <TrendsScreen
+              sme={activeSme}
+              opportunity={opportunity}
+              partners={partners}
+              assumptions={assumptions}
               onNavigateScreen={setPortalScreen}
               onOpenAssumptions={() => setIsAssumptionsModalOpen(true)}
             />

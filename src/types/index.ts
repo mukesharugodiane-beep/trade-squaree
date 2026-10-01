@@ -180,6 +180,7 @@ export interface CorridorAssumptions {
 
 export type ActiveScreen =
   | 'dashboard-home'
+  | 'trends'
   | 'partners-finder'
   | 'profile'
   | 'export-form'

@@ -291,62 +291,60 @@ export const HowItWorksHighlights: React.FC<HowItWorksHighlightsProps> = ({
 
   return (
     <section
-      className="w-full py-8 sm:py-12 bg-transparent select-none"
+      className="w-full py-8 sm:py-12 lg:py-14 bg-white select-none"
       aria-label="How Trade Square Works Highlights"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center">
           {/* =========================================================================
               LEFT COLUMN: 16:9 Landscape High-Res Photography
               ========================================================================= */}
-          <div className="w-full relative overflow-hidden rounded-2xl bg-slate-900 shadow-md aspect-[16/9] group">
+          <div className="w-full lg:col-span-7 relative overflow-hidden rounded-2xl bg-neutral-100 shadow-sm aspect-[16/9] group">
             <img
               key={currentSlide.image}
               src={currentSlide.image}
               alt={imageAltText}
-              className={`w-full h-full object-cover object-center transition-all duration-700 ease-out transform group-hover:scale-105 ${
-                isTransitioning ? 'opacity-40 scale-102 filter blur-xs' : 'opacity-100 scale-100'
+              className={`w-full h-full object-cover object-center transition-all duration-700 ease-out transform group-hover:scale-[1.03] ${
+                isTransitioning ? 'opacity-40 scale-[1.01]' : 'opacity-100 scale-100'
               }`}
               loading="lazy"
             />
-            {/* Subtle natural photo vignette to match reference styling */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10 pointer-events-none" />
           </div>
 
           {/* =========================================================================
-              RIGHT COLUMN: Minimal Centered Typography
+              RIGHT COLUMN: Minimal Centered Typography (100% Reference Image Clone)
               ========================================================================= */}
           <div
-            className={`w-full max-w-lg mx-auto flex flex-col items-center justify-center text-center transition-all duration-300 ease-in-out ${
+            className={`w-full lg:col-span-5 max-w-[420px] mx-auto flex flex-col items-center justify-center text-center transition-all duration-300 ease-in-out ${
               isTransitioning
-                ? 'opacity-40 translate-y-1.5'
+                ? 'opacity-40 translate-y-1'
                 : 'opacity-100 translate-y-0'
             }`}
           >
-            {/* Top Subtitle Label */}
-            <span className="text-xs sm:text-[13px] font-bold text-[#005A94] tracking-wider mb-1.5 uppercase text-center block">
+            {/* Top Subtitle Label ("Highlights") */}
+            <span className="text-xs sm:text-[13px] font-bold text-[#1A1A1A] tracking-normal mb-2 text-center block">
               {categoryText}
             </span>
 
-            {/* Main Headline */}
-            <h2 className="text-xl sm:text-2xl lg:text-[28px] font-normal text-gray-900 tracking-tight leading-snug mb-3 sm:mb-4 text-center">
+            {/* Main Light, Elegant Headline */}
+            <h2 className="text-2xl sm:text-[28px] lg:text-[32px] font-light text-[#1A1A1A] tracking-tight leading-[1.22] mb-4 sm:mb-5 text-center">
               {titleText}
             </h2>
 
             {/* Three Centered Spaced Paragraphs */}
-            <div className="space-y-2.5 sm:space-y-3 text-gray-600 text-xs sm:text-[13px] leading-relaxed text-center mb-5 sm:mb-6 font-normal">
+            <div className="space-y-3 sm:space-y-3.5 text-[#555555] text-xs sm:text-[13px] leading-[1.68] text-center mb-6 sm:mb-7 font-normal">
               <p>{paragraphsText[0]}</p>
               <p>{paragraphsText[1]}</p>
               <p>{paragraphsText[2]}</p>
             </div>
 
-            {/* Call To Action Button */}
+            {/* Dark Rounded Call To Action Button with Right Arrow */}
             <button
               type="button"
               onClick={() => onNavigate(currentSlide.targetPage)}
-              className="inline-flex items-center justify-center gap-1.5 px-6 py-2.5 rounded-md text-xs sm:text-sm font-semibold text-white bg-[#005A94] hover:bg-[#2673A6] transition-all duration-200 shadow-xs hover:shadow-md cursor-pointer group mb-5 sm:mb-6"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-[6px] text-xs sm:text-[13px] font-medium text-white bg-[#222222] hover:bg-[#000000] transition-all duration-200 shadow-2xs cursor-pointer group mb-6 sm:mb-7"
             >
               <span>{buttonLabelText}</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
@@ -354,7 +352,7 @@ export const HowItWorksHighlights: React.FC<HowItWorksHighlightsProps> = ({
 
             {/* Four Carousel Pagination Indicator Dots (○ ● ○ ○) */}
             <div
-              className="flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2.5"
               role="tablist"
               aria-label="Highlight slides"
             >
@@ -365,9 +363,7 @@ export const HowItWorksHighlights: React.FC<HowItWorksHighlightsProps> = ({
                     key={index}
                     type="button"
                     onClick={() => goToSlide(index)}
-                    className={`transition-all duration-200 rounded-full cursor-pointer p-1 focus:outline-none focus:ring-2 focus:ring-[#005A94]/50 ${
-                      isActive ? 'scale-110' : 'hover:scale-105'
-                    }`}
+                    className="transition-all duration-200 rounded-full cursor-pointer p-1 focus:outline-none focus:ring-2 focus:ring-[#222222]/40"
                     role="tab"
                     aria-selected={isActive}
                     aria-label={`Slide ${index + 1}`}
@@ -375,8 +371,8 @@ export const HowItWorksHighlights: React.FC<HowItWorksHighlightsProps> = ({
                     <span
                       className={`block rounded-full transition-all duration-300 ${
                         isActive
-                          ? 'w-2.5 h-2.5 bg-[#005A94]'
-                          : 'w-2 h-2 bg-transparent border border-gray-400 hover:border-[#005A94]'
+                          ? 'w-2 h-2 bg-[#222222] border border-[#222222]'
+                          : 'w-2 h-2 bg-transparent border border-[#888888] hover:border-[#222222]'
                       }`}
                     />
                   </button>

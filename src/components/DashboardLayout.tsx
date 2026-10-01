@@ -10,7 +10,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import {
+  LayoutDashboard,
   TrendingUp,
+  BarChart3,
   User,
   FileText,
   Building2,
@@ -231,35 +233,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     }, 900);
   };
 
-  const topNavItems = [
-    {
-      id: 'dashboard-home' as ActiveScreen,
-      label: 'Dashboard',
-      icon: TrendingUp
-    },
-    {
-      id: 'partners-finder' as ActiveScreen,
-      label: 'Partners Finder',
-      icon: Globe
-    },
-    {
-      id: 'export-form' as ActiveScreen,
-      label: 'Export Opportunity',
-      icon: FileText
-    },
-    {
-      id: 'pipeline' as ActiveScreen,
-      label: 'Trade Pipeline',
-      icon: Building2
-    }
-  ];
-
   const activeAvatarSrc = sme.avatarUrl || editAvatarUrl || defaultProfileWoman;
 
   return (
     <div className="h-screen overflow-hidden bg-[#F4F6F9] text-slate-800 flex flex-col font-sans antialiased">
       {/* =========================================================================
-          STICKY TOP HEADER BAR
+          STICKY TOP HEADER BAR (Streamlined: Brand Left, Profile Right)
           ========================================================================= */}
       <header className="sticky top-0 z-40 shrink-0 w-full bg-[#F2F4F7] border-b border-slate-200/90 h-14 sm:h-16 px-3 sm:px-6 flex items-center justify-between gap-2 shadow-2xs">
         {/* Left: Mobile Menu Button + Trade Square / MINICOM Brand Mark */}
@@ -290,39 +269,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               </span>
             </div>
 
-            <div className="hidden xl:flex flex-col border-l border-[#005A94]/35 pl-2 py-0.5 text-[8px] font-semibold uppercase tracking-wider text-[#005A94] leading-tight">
+            <div className="hidden sm:flex flex-col border-l border-[#005A94]/35 pl-2 py-0.5 text-[8px] font-semibold uppercase tracking-wider text-[#005A94] leading-tight">
               <span>MINICOM RWANDA</span>
               <span>NORTHERN CORRIDOR PILOT</span>
             </div>
           </button>
         </div>
-
-        {/* Center: 3 Horizontal Navigation Tabs with Soft Blue Active Pill (#DDEBF7) */}
-        <nav className="hidden md:flex items-center gap-1.5 lg:gap-3 shrink-0">
-          {topNavItems.map((item) => {
-            const Icon = item.icon;
-            const isActive =
-              activeScreen === item.id ||
-              (item.id === 'dashboard-home' &&
-                (activeScreen === 'shortlist' || activeScreen === 'match-detail'));
-
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handleNavClick(item.id)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs transition-colors cursor-pointer whitespace-nowrap ${
-                  isActive
-                    ? 'bg-[#DDEBF7] text-[#005A94] font-semibold'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 font-medium'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#005A94]' : 'text-slate-500'}`} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
 
         {/* Right: User Profile Picture Image + Name + Email + Chevron Dropdown */}
         <div className="relative shrink-0" ref={dropdownRef}>
@@ -414,33 +366,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         </div>
       </header>
 
-      {/* Mobile Sticky Secondary Quick-Tab Bar (Visible only on phones < md) */}
-      <div className="md:hidden shrink-0 bg-[#F2F4F7] border-b border-slate-200 px-3 py-1.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-        {topNavItems.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            activeScreen === item.id ||
-            (item.id === 'dashboard-home' &&
-              (activeScreen === 'shortlist' || activeScreen === 'match-detail'));
-
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => handleNavClick(item.id)}
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                isActive
-                  ? 'bg-[#DDEBF7] text-[#005A94] font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 font-medium'
-              }`}
-            >
-              <Icon className="w-3 h-3" />
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
       {/* =========================================================================
           MAIN WORKSPACE: FIXED/STICKY LEFT SIDEBAR + SCROLLABLE CONTENT + STICKY FOOTER
           ========================================================================= */}
@@ -500,11 +425,25 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                     : 'text-white/90 hover:bg-white/10 font-medium'
                 }`}
               >
-                <TrendingUp className="w-3.5 h-3.5 shrink-0 text-white" />
+                <LayoutDashboard className="w-3.5 h-3.5 shrink-0 text-white" />
                 {!sidebarCollapsed && <span className="truncate">Dashboard</span>}
               </button>
 
-              {/* 2. Partners Finder (AI Regional Trade Intelligence) */}
+              {/* 2. Trends (Market Trends & Supply-Demand Intelligence) */}
+              <button
+                type="button"
+                onClick={() => handleNavClick('trends')}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-xs transition-colors cursor-pointer ${
+                  activeScreen === 'trends'
+                    ? 'bg-[#2673A6] text-white font-semibold'
+                    : 'text-white/90 hover:bg-white/10 font-medium'
+                }`}
+              >
+                <BarChart3 className="w-3.5 h-3.5 shrink-0 text-white" />
+                {!sidebarCollapsed && <span className="truncate">Trends</span>}
+              </button>
+
+              {/* 3. Partners Finder (AI Regional Trade Intelligence) */}
               <button
                 type="button"
                 onClick={() => handleNavClick('partners-finder')}

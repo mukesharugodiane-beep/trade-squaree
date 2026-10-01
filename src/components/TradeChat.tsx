@@ -374,10 +374,45 @@ export const TradeChat: React.FC<TradeChatProps> = ({
       setVoiceTranscript(text);
     }
 
-    const topMatches = scoredPartners.slice(0, 2).map((sp) => ({
-      partner: sp.partner,
-      score: sp.scoreBreakdown?.totalScore ?? 88
-    }));
+    const lowerText = text.toLowerCase().trim();
+    const isPartnerOrMarketQuery = [
+      'partner',
+      'buyer',
+      'client',
+      'company',
+      'companies',
+      'service',
+      'logistics',
+      'fintech',
+      'software',
+      'clearing',
+      'coffee',
+      'tea',
+      'bean',
+      'maize',
+      'avocado',
+      'honey',
+      'cassava',
+      'kenya',
+      'uganda',
+      'burundi',
+      'drc',
+      'tanzania',
+      'price',
+      'margin',
+      'shortlist',
+      'match',
+      'find',
+      'connect',
+      'introduce'
+    ].some((kw) => lowerText.includes(kw));
+
+    const topMatches = isPartnerOrMarketQuery
+      ? scoredPartners.slice(0, 2).map((sp) => ({
+          partner: sp.partner,
+          score: sp.scoreBreakdown?.totalScore ?? 88
+        }))
+      : undefined;
 
     try {
       const res = await fetch('/api/ai/match', {
@@ -385,9 +420,11 @@ export const TradeChat: React.FC<TradeChatProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           question: text,
-          partnerCategory: 'Verified Kenyan Buyers',
-          regionalMarket: 'Kenya (Northern Corridor)',
-          symbolContext: `HS ${productHs} (${capacityKg.toLocaleString()} kg/mo at ${exWorksRwf.toLocaleString()} RWF/kg)`,
+          partnerCategory: 'Verified Regional Partners (Services & Products)',
+          regionalMarket: 'East Africa & Great Lakes (Kenya, Burundi, Uganda, DRC, Tanzania)',
+          symbolContext: isPartnerOrMarketQuery
+            ? `Active Offering Code ${productHs}`
+            : 'General Conversational Inquiry',
           smeContext: businessName,
           history: priorHistory
         })
@@ -417,12 +454,17 @@ export const TradeChat: React.FC<TradeChatProps> = ({
       throw new Error('Fallback');
     } catch {
       setTimeout(() => {
-        const landedKes = ((exWorksRwf + 85) / 9.85).toFixed(1);
-        const topBuyer = topMatches[0]?.partner;
-
-        const reply = `For ${businessName} (HS ${productHs}, ${capacityKg.toLocaleString()} kg/mo), the estimated Nairobi landed cost is KES ${landedKes}/kg under 0% EAC tariff.\n\nRecommended counterparty: ${
-          topBuyer?.name || 'Nairobi Grain & Pulses Ltd (sample)'
-        } (${topBuyer?.city || 'Nairobi'}, KRA PIN ${topBuyer?.kraPin || 'P051209384K'}).`;
+        let reply = '';
+        if (!isPartnerOrMarketQuery) {
+          reply = `Hello! I am Trade Square AI. I can help ${businessName} discover verified regional partners for B2B services (logistics, software, FinTech, clearing) or commercial goods across Kenya, Burundi, Uganda, DRC, and Tanzania. How can I assist you today?`;
+        } else {
+          const topBuyer = topMatches?.[0]?.partner;
+          reply = `Based on the MINICOM regional registry for ${businessName}, top verified partners include ${
+            topBuyer?.name.replace(' (sample)', '') || 'Nairobi & Regional Corridor Partners'
+          } (${topBuyer?.city || 'Nairobi'}, Registry ID ${
+            topBuyer?.kraPin || 'P051209384K'
+          }) with verified track records and on-time settlement.`;
+        }
 
         const aiMsg: ChatMessage = {
           id: `ai-${Date.now()}`,
@@ -439,7 +481,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
           speakResponse(reply);
           setTimeout(() => setIsVoiceActive(false), 1800);
         }
-      }, 600);
+      }, 450);
     }
   };
 

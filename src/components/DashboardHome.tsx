@@ -29,6 +29,7 @@ import {
   KenyanPartner,
   RwandanSME,
   ExportOpportunity,
+  CorridorAssumptions,
   ActiveScreen,
   PipelineItem,
   IntroductionRequest
@@ -38,6 +39,8 @@ import { HS_PRODUCTS } from '../data/seedData';
 interface DashboardHomeProps {
   sme: RwandanSME;
   opportunity: ExportOpportunity;
+  partners?: KenyanPartner[];
+  assumptions?: CorridorAssumptions;
   scoredPartners: {
     partner: KenyanPartner;
     scoreBreakdown: any;
