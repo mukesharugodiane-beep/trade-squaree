@@ -94,7 +94,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
       {/* Accessible Skip Link */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-[#043E6B] focus:font-bold focus:border focus:border-[#0096FC] focus:rounded-md focus:shadow-xl"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-[#005A94] focus:font-bold focus:border focus:border-[#005A94] focus:rounded-md focus:shadow-xl"
       >
         Skip to main content
       </a>
@@ -103,7 +103,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
       <header
         className={`w-full sticky top-0 z-50 text-white transition-all duration-300 ${
           isScrolled || currentPage !== 'home'
-            ? 'bg-[#011945]/95 backdrop-blur-md shadow-lg border-b border-blue-900/50'
+            ? 'bg-[#005A94]/95 backdrop-blur-md shadow-lg border-b border-white/15'
             : 'bg-transparent border-b border-transparent shadow-none'
         }`}
       >
@@ -117,7 +117,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
               <button
                 type="button"
                 onClick={() => handleNavClick('home')}
-                className="flex items-center gap-2 sm:gap-2.5 text-left group focus-visible:outline-2 focus-visible:outline-[#0096FC] rounded-lg p-0.5 transition-opacity hover:opacity-95 cursor-pointer"
+                className="flex items-center gap-2 sm:gap-2.5 text-left group focus-visible:outline-2 focus-visible:outline-[#DDEBF7] rounded-lg p-0.5 transition-opacity hover:opacity-95 cursor-pointer"
                 aria-label="Trade Square homepage"
               >
                 {/* Official Coat of Arms of Rwanda */}
@@ -149,11 +149,11 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
                     <span className="text-sm sm:text-base font-bold tracking-tight text-white leading-none whitespace-nowrap">
                       {t.brandTitle}
                     </span>
-                    <span className="bg-[#0096FC] text-[#043E6B] font-extrabold text-[9px] px-1 py-0.2 rounded tracking-wider uppercase">
+                    <span className="bg-[#DDEBF7] text-[#005A94] font-extrabold text-[9px] px-1 py-0.2 rounded tracking-wider uppercase">
                       {t.ministryBadge}
                     </span>
                   </div>
-                  <span className="text-[9px] text-blue-200 tracking-wider font-medium mt-0.5 hidden md:block whitespace-nowrap">
+                  <span className="text-[9px] text-[#DDEBF7] tracking-wider font-medium mt-0.5 hidden md:block whitespace-nowrap">
                     {t.ministryName}
                   </span>
                 </div>
@@ -179,7 +179,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
                     <span>{item.label}</span>
                     {isActive && (
                       <span
-                        className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#0096FC] rounded-full shadow-[0_0_8px_#0096FC]"
+                        className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#DDEBF7] rounded-full shadow-[0_0_8px_#DDEBF7]"
                         aria-hidden="true"
                       />
                     )}
@@ -195,18 +195,18 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
                 <button
                   type="button"
                   onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-800 text-white border border-white/20 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-[#2673A6]/80 hover:bg-[#2673A6] text-white border border-white/25 transition-colors cursor-pointer"
                   aria-expanded={langDropdownOpen}
                   aria-label="Select language"
                 >
-                  <Globe className="w-3.5 h-3.5 text-[#0096FC]" />
+                  <Globe className="w-3.5 h-3.5 text-[#DDEBF7]" />
                   <span>{currentLangObj.label}</span>
                   <ChevronDown className={`w-3 h-3 transition-transform ${langDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {langDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-44 bg-[#043E6B] border border-blue-400/30 rounded-xl shadow-xl py-1.5 z-50 text-white">
-                    <div className="px-3 py-1 text-[10px] text-blue-200 uppercase tracking-wider font-semibold border-b border-white/10 mb-1">
+                  <div className="absolute right-0 mt-2 w-44 bg-[#005A94] border border-white/25 rounded-xl shadow-xl py-1.5 z-50 text-white">
+                    <div className="px-3 py-1 text-[10px] text-[#DDEBF7] uppercase tracking-wider font-semibold border-b border-white/15 mb-1">
                       Choose Language
                     </div>
                     {SUPPORTED_LANGUAGES.map((lang) => (
@@ -219,7 +219,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
                         }}
                         className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors cursor-pointer ${
                           currentLang === lang.code
-                            ? 'bg-white/15 text-white font-bold'
+                            ? 'bg-[#2673A6] text-white font-bold'
                             : 'hover:bg-white/10 text-white/90'
                         }`}
                       >
@@ -227,7 +227,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
                           <span className="text-sm">{lang.flag}</span>
                           <span>{lang.label}</span>
                         </div>
-                        {currentLang === lang.code && <Check className="w-3.5 h-3.5 text-[#0096FC]" />}
+                        {currentLang === lang.code && <Check className="w-3.5 h-3.5 text-[#DDEBF7]" />}
                       </button>
                     ))}
                   </div>
@@ -251,7 +251,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
               <button
                 type="button"
                 onClick={onOpenSignIn}
-                className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full text-xs font-semibold transition-all duration-150 text-white bg-gradient-to-r from-[#003893] to-[#0096FC] hover:from-[#003893]/90 hover:to-[#0096FC]/90 shadow-sm h-8 px-4 cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full text-xs font-semibold transition-all duration-150 text-white bg-[#005A94] hover:bg-[#2673A6] border border-white/30 shadow-sm h-8 px-4 cursor-pointer"
                 aria-label="Sign in"
               >
                 <User className="w-3.5 h-3.5 text-white" aria-hidden="true" />
@@ -265,7 +265,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
               <button
                 type="button"
                 onClick={cycleMobileLanguage}
-                className="text-[11px] font-bold bg-slate-700/70 hover:bg-slate-700 text-white border border-white/20 px-2.5 py-1 rounded-full uppercase transition-colors cursor-pointer flex items-center gap-1"
+                className="text-[11px] font-bold bg-[#2673A6]/80 hover:bg-[#2673A6] text-white border border-white/25 px-2.5 py-1 rounded-full uppercase transition-colors cursor-pointer flex items-center gap-1"
                 aria-label={`Current language: ${currentLangObj.label}. Click to switch.`}
               >
                 <span>{currentLangObj.flag}</span>
@@ -276,7 +276,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
               <button
                 type="button"
                 onClick={onOpenSignIn}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-white bg-gradient-to-r from-[#003893] to-[#0096FC] hover:from-[#003893]/90 hover:to-[#0096FC]/90 px-3 py-1 rounded-full shadow-sm cursor-pointer whitespace-nowrap"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-white bg-[#005A94] hover:bg-[#2673A6] border border-white/30 px-3 py-1 rounded-full shadow-sm cursor-pointer whitespace-nowrap"
                 aria-label="Sign in"
               >
                 <User className="w-3.5 h-3.5" />
@@ -303,10 +303,10 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
 
         {/* Mobile & Tablet Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#043E6B] border-t border-white/15 px-4 sm:px-6 py-4 text-white shadow-2xl animate-in slide-in-from-top-2 duration-150">
+          <div className="lg:hidden bg-[#005A94] border-t border-white/15 px-4 sm:px-6 py-4 text-white shadow-2xl animate-in slide-in-from-top-2 duration-150">
             <div className="flex flex-col space-y-2 max-w-lg mx-auto">
               <div className="pb-2.5 mb-1 border-b border-white/15 flex flex-col gap-2">
-                <span className="text-[11px] uppercase tracking-wider text-blue-200 font-semibold">
+                <span className="text-[11px] uppercase tracking-wider text-[#DDEBF7] font-semibold">
                   {t.mobileMenu} · Language
                 </span>
                 {/* 4-Language Pills on Mobile */}
@@ -318,7 +318,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
                       onClick={() => onLanguageChange(lang.code)}
                       className={`px-2.5 py-1.5 text-xs rounded-lg font-bold transition-colors flex items-center justify-center gap-1.5 ${
                         currentLang === lang.code
-                          ? 'bg-white text-[#043E6B] shadow-sm'
+                          ? 'bg-white text-[#005A94] shadow-sm'
                           : 'text-white/80 hover:text-white bg-white/10'
                       }`}
                     >
@@ -340,15 +340,15 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
                       onClick={() => handleNavClick(item.id)}
                       className={`flex items-center justify-between text-left py-2.5 px-3 rounded-lg text-sm font-semibold transition-colors min-h-[44px] cursor-pointer ${
                         isActive
-                          ? 'bg-white/20 text-white font-bold border-l-4 border-[#0096FC]'
-                          : 'text-blue-100 hover:text-white hover:bg-white/5'
+                          ? 'bg-[#2673A6] text-white font-bold border-l-4 border-[#DDEBF7]'
+                          : 'text-[#DDEBF7] hover:text-white hover:bg-white/10'
                       }`}
                     >
                       <span>{item.label}</span>
                       {isActive ? (
-                        <Check className="w-4 h-4 text-[#0096FC]" />
+                        <Check className="w-4 h-4 text-[#DDEBF7]" />
                       ) : (
-                        <ChevronRight className="w-3.5 h-3.5 text-blue-300/50" />
+                        <ChevronRight className="w-3.5 h-3.5 text-white/50" />
                       )}
                     </button>
                   );
@@ -377,7 +377,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
                     setMobileMenuOpen(false);
                     onOpenSignIn();
                   }}
-                  className="w-full text-center py-2.5 px-4 rounded-full text-xs font-bold text-white bg-gradient-to-r from-[#003893] to-[#0096FC] hover:from-[#003893]/90 hover:to-[#0096FC]/90 transition-colors cursor-pointer min-h-[44px] flex items-center justify-center shadow-md gap-1.5"
+                  className="w-full text-center py-2.5 px-4 rounded-full text-xs font-bold text-white bg-[#2673A6] hover:bg-[#004876] border border-white/30 transition-colors cursor-pointer min-h-[44px] flex items-center justify-center shadow-md gap-1.5"
                 >
                   <User className="w-4 h-4" />
                   <span>{t.btnSignIn}</span>

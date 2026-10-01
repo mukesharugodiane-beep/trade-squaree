@@ -1,13 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Calibri', 'Carlito', 'Candara', 'Segoe UI', Arial, sans-serif;
+  --font-serif: 'Calibri', 'Carlito', 'Candara', 'Segoe UI', Arial, sans-serif;
+  --font-mono: 'Calibri', 'Carlito', 'Candara', 'Segoe UI', Arial, sans-serif;
+}
+
 :root {
-  --brand: #0662AB;
-  --brand-dark: #043E6B;
-  --brand-light: #EBF3FA;
+  --brand: #005A94;
+  --brand-dark: #004876;
+  --brand-light: #DDEBF7;
   --success: #1E7E34;
   --warning: #B76E00;
   --error: #C92A2A;
-  --info: #0C63E4;
+  --info: #005A94;
   --text-display: #0F172A;
   --text-body: #334155;
   --text-sub: #64748B;
@@ -17,8 +23,19 @@
   --gray-500: #64748B;
 }
 
+html,
+body,
+*,
+*::before,
+*::after,
+button,
+input,
+select,
+textarea {
+  font-family: 'Calibri', 'Carlito', 'Candara', 'Segoe UI', Arial, sans-serif !important;
+}
+
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--text-body);
   background-color: #FFFFFF;
   margin: 0;

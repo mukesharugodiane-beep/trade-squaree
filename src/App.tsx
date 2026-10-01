@@ -56,6 +56,7 @@ import { calculateMatchScore, sortAndFilterShortlist } from './utils/scoring';
 import { Navigation } from './components/Navigation';
 import { DashboardLayout } from './components/DashboardLayout';
 import { DashboardHome } from './components/DashboardHome';
+import { PartnersFinder } from './components/PartnersFinder';
 import { ProfileScreen } from './components/ProfileScreen';
 import { ExportFormScreen } from './components/ExportFormScreen';
 import { ShortlistScreen } from './components/ShortlistScreen';
@@ -218,6 +219,18 @@ export default function App() {
                 sme.certifications.length > 0 ? [sme.certifications[0]] : ['RSB S-Mark']
             });
           }}
+          onUpdateSme={(updated) => {
+            setSmes((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+            const prod = HS_PRODUCTS.find((p) => p.hsCode === updated.selectedHsCode) || HS_PRODUCTS[0];
+            setOpportunity((prevOpp) => ({
+              ...prevOpp,
+              productHs: prod.hsCode,
+              capacityKgMonth: updated.monthlyCapacityKg,
+              exWorksPriceRwf: updated.exWorksPriceRwf,
+              requiredCertifications:
+                updated.certifications.length > 0 ? [updated.certifications[0]] : ['RSB S-Mark']
+            }));
+          }}
           shortlistCount={scoredPartners.length}
           pendingIntroCount={introRequests.filter((r) => r.status === 'Pending review').length}
           searchQuery={dashboardSearchQuery}
@@ -242,6 +255,8 @@ export default function App() {
               opportunity={opportunity}
               scoredPartners={scoredPartners}
               savedPartnerIds={savedPartnerIds}
+              pipelineItems={pipelineItems}
+              introRequests={introRequests}
               searchQuery={dashboardSearchQuery}
               onToggleSavePartner={(partnerId) => {
                 setSavedPartnerIds((prev) =>
@@ -261,6 +276,34 @@ export default function App() {
               }}
               onNavigateScreen={setPortalScreen}
               onOpenAssumptions={() => setIsAssumptionsModalOpen(true)}
+            />
+          )}
+
+          {portalScreen === 'partners-finder' && (
+            <PartnersFinder
+              sme={activeSme}
+              partners={partners}
+              opportunity={opportunity}
+              assumptions={assumptions}
+              savedPartnerIds={savedPartnerIds}
+              onToggleSavePartner={(partnerId) => {
+                setSavedPartnerIds((prev) =>
+                  prev.includes(partnerId)
+                    ? prev.filter((id) => id !== partnerId)
+                    : [...prev, partnerId]
+                );
+              }}
+              onSelectPartnerDetail={(partner) => {
+                setActivePartnerDetailId(partner.id);
+                setPortalScreen('match-detail');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onRequestIntroduction={(partner) => {
+                setTargetIntroPartner(partner);
+                setIsIntroModalOpen(true);
+              }}
+              onSaveOpportunity={setOpportunity}
+              onBackToDashboard={() => setPortalScreen('dashboard-home')}
             />
           )}
 

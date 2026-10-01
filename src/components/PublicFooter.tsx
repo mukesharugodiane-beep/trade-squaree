@@ -49,8 +49,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
 
   return (
     <footer
-      className="relative w-full text-white overflow-hidden mt-16 select-none"
-      style={{ backgroundColor: '#004866' }}
+      className="relative w-full text-white overflow-hidden mt-16 select-none bg-[#005A94]"
       aria-label="Government of Rwanda Footer"
     >
       {/* =========================================================================
@@ -73,7 +72,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
               <polygon
                 points="30,0 60,45 30,90 0,45"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="2"
                 strokeOpacity="0.25"
               />
@@ -81,28 +80,28 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
               <polygon
                 points="30,9 54,45 30,81 6,45"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="2"
                 strokeOpacity="0.22"
               />
               <polygon
                 points="30,18 48,45 30,72 12,45"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="2"
                 strokeOpacity="0.20"
               />
               <polygon
                 points="30,27 42,45 30,63 18,45"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="2"
                 strokeOpacity="0.18"
               />
               <polygon
                 points="30,36 36,45 30,54 24,45"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="1.75"
                 strokeOpacity="0.16"
               />
@@ -111,28 +110,28 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
               <polyline
                 points="0,0 15,22.5 0,45"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="2"
                 strokeOpacity="0.22"
               />
               <polyline
                 points="0,9 9,22.5 0,36"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="1.75"
                 strokeOpacity="0.20"
               />
               <polyline
                 points="0,45 15,67.5 0,90"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="2"
                 strokeOpacity="0.22"
               />
               <polyline
                 points="0,54 9,67.5 0,81"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="1.75"
                 strokeOpacity="0.20"
               />
@@ -141,28 +140,28 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
               <polyline
                 points="60,0 45,22.5 60,45"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="2"
                 strokeOpacity="0.22"
               />
               <polyline
                 points="60,9 51,22.5 60,36"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="1.75"
                 strokeOpacity="0.20"
               />
               <polyline
                 points="60,45 45,67.5 60,90"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="2"
                 strokeOpacity="0.22"
               />
               <polyline
                 points="60,54 51,67.5 60,81"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#DDEBF7"
                 strokeWidth="1.75"
                 strokeOpacity="0.20"
               />
@@ -182,7 +181,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
               COLUMN 1: NAVIGATION
               ------------------------------------------------------------------- */}
           <div className="flex flex-col space-y-3.5">
-            <h2 className="text-[#00a2ea] font-bold text-xs tracking-wider uppercase">
+            <h2 className="text-[#DDEBF7] font-bold text-xs tracking-wider uppercase">
               {getFooterText('NAVIGATION', 'GUSHAKISHA', 'URAMBAZAJI', 'NAVIGATION')}
             </h2>
             <ul className="space-y-2.5 text-xs sm:text-[13px] font-medium text-white">
@@ -190,7 +189,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('home')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Home', 'Ahabanza', 'Nyumbani', 'Accueil')}
                 </button>
@@ -199,7 +198,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('how-it-works')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('About', 'Ibyerekeye', 'Kuhusu', 'À Propos')}
                 </button>
@@ -208,7 +207,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('for-smes')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Services', 'Serivisi za ba Rwiyemezamirimo', 'Huduma za SMEs', 'Services PME')}
                 </button>
@@ -217,7 +216,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('how-it-works')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Highlights', 'Iby\'ingenzi', 'Vivutio', 'Points Clés')}
                 </button>
@@ -226,7 +225,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('faq')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('News & FAQ', 'Amakuru & Ibibazo', 'Habari & Maswali', 'Actualités & FAQ')}
                 </button>
@@ -235,7 +234,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('for-regional-partners')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Regional Partners', 'Abafatanyabikorwa bo mu Karere', 'Washirika wa Kikanda', 'Partenaires Régionaux')}
                 </button>
@@ -247,7 +246,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
               COLUMN 2: GOVERNMENT
               ------------------------------------------------------------------- */}
           <div className="flex flex-col space-y-3.5">
-            <h2 className="text-[#00a2ea] font-bold text-xs tracking-wider uppercase">
+            <h2 className="text-[#DDEBF7] font-bold text-xs tracking-wider uppercase">
               {getFooterText('GOVERNMENT', 'LETA', 'SERIKALI', 'GOUVERNEMENT')}
             </h2>
             <ul className="space-y-2.5 text-xs sm:text-[13px] font-medium text-white">
@@ -255,7 +254,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('trust-and-data')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Overview', 'Incamake ya MINICOM', 'Maelezo ya MINICOM', 'Aperçu du MINICOM')}
                 </button>
@@ -269,7 +268,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('pilot')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Cabinet', 'Inama y\'Abaminisitiri', 'Baraza la Mawaziri', 'Conseil des Ministres')}
                 </button>
@@ -283,7 +282,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('trust-and-data')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Publications', 'Ibitangazwa', 'Machapisho', 'Publications')}
                 </button>
@@ -300,7 +299,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
               COLUMN 3: PUBLICATIONS
               ------------------------------------------------------------------- */}
           <div className="flex flex-col space-y-3.5">
-            <h2 className="text-[#00a2ea] font-bold text-xs tracking-wider uppercase">
+            <h2 className="text-[#DDEBF7] font-bold text-xs tracking-wider uppercase">
               {getFooterText('PUBLICATIONS', 'IBITANGAZWA', 'MACHAPISHO', 'PUBLICATIONS')}
             </h2>
             <ul className="space-y-2.5 text-xs sm:text-[13px] font-medium text-white">
@@ -313,7 +312,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('pilot')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Press Release', 'Itangazo ku Binyamakuru', 'Taarifa kwa Vyombo vya Habari', 'Communiqués de Presse')}
                 </button>
@@ -322,7 +321,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('trust-and-data')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Laws and Regulations', 'Amategeko n\'Amabwiriza', 'Sheria na Kanuni', 'Lois et Règlements')}
                 </button>
@@ -331,7 +330,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('trust-and-data')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Documents Archives', 'Ububiko bw\'Inyandiko', 'Nyaraka za Kumbukumbu', 'Archives Documentaires')}
                 </button>
@@ -350,7 +349,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('contact')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Newsletters', 'Amakuru Mashya', 'Jarida la Habari', 'Bulletins d\'Information')}
                 </button>
@@ -362,7 +361,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
               COLUMN 4: CONNECT & SOCIAL MEDIA
               ------------------------------------------------------------------- */}
           <div className="flex flex-col space-y-3.5">
-            <h2 className="text-[#00a2ea] font-bold text-xs tracking-wider uppercase">
+            <h2 className="text-[#DDEBF7] font-bold text-xs tracking-wider uppercase">
               {getFooterText('CONNECT', 'TWANDIKIRE', 'WASILIANA', 'CONTACT')}
             </h2>
             <ul className="space-y-2.5 text-xs sm:text-[13px] font-medium text-white">
@@ -370,7 +369,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('contact')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Contact Us', 'Twandikire', 'Wasiliana Nasi', 'Contactez-nous')}
                 </button>
@@ -379,7 +378,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('contact')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Emergency / MINICOM Desk', 'Ubutabazi / Ibiro bya MINICOM', 'Dawati la Dharura la MINICOM', 'Urgences / MINICOM')}
                 </button>
@@ -388,7 +387,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('contact')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Check Mail', 'Imeri ya Leta', 'Barua Pepe ya Serikali', 'Messagerie Gouvernementale')}
                 </button>
@@ -397,21 +396,21 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 <button
                   type="button"
                   onClick={() => onNavigate('trust-and-data')}
-                  className="hover:text-[#00a2ea] transition-colors cursor-pointer text-left"
+                  className="hover:text-[#DDEBF7] transition-colors cursor-pointer text-left"
                 >
                   {getFooterText('Privacy Policy', 'Ibijyanye n\'Amabanga', 'Sera ya Faragha', 'Politique de Confidentialité')}
                 </button>
               </li>
             </ul>
 
-            {/* 6 Circular Sky-Blue Social Media Icons */}
+            {/* 6 Circular Social Media Icons */}
             <div className="pt-2 flex items-center gap-2 sm:gap-2.5 flex-wrap">
-              {/* 1. X (formerly Twitter) */}
+              {/* 1. X */}
               <a
                 href="https://twitter.com/RwandaTrade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#00a2ea] hover:bg-[#0091d2] text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2673A6] hover:bg-[#004876] border border-white/20 text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
                 aria-label="X (Twitter)"
                 title="Follow Republic of Rwanda on X"
               >
@@ -425,7 +424,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 href="https://www.youtube.com/@RwandaTrade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#00a2ea] hover:bg-[#0091d2] text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2673A6] hover:bg-[#004876] border border-white/20 text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
                 aria-label="YouTube"
                 title="Watch on YouTube"
               >
@@ -439,7 +438,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 href="https://www.instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#00a2ea] hover:bg-[#0091d2] text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2673A6] hover:bg-[#004876] border border-white/20 text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
                 aria-label="Instagram"
                 title="Follow on Instagram"
               >
@@ -450,12 +449,12 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 </svg>
               </a>
 
-              {/* 4. Flickr / Discussions / Dots */}
+              {/* 4. Flickr */}
               <a
                 href="https://www.flickr.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#00a2ea] hover:bg-[#0091d2] text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2673A6] hover:bg-[#004876] border border-white/20 text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
                 aria-label="Flickr"
                 title="View Photo Gallery"
               >
@@ -470,7 +469,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 href="https://www.facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#00a2ea] hover:bg-[#0091d2] text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2673A6] hover:bg-[#004876] border border-white/20 text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
                 aria-label="Facebook"
                 title="Connect on Facebook"
               >
@@ -484,7 +483,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
                 href="https://wa.me/250788123456"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#00a2ea] hover:bg-[#0091d2] text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2673A6] hover:bg-[#004876] border border-white/20 text-white flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-sm"
                 aria-label="WhatsApp"
                 title="Contact Trade Desk on WhatsApp"
               >
@@ -497,9 +496,9 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
         </div>
 
         {/* =========================================================================
-            GOVERNMENT OFFICIAL TRADE PORTALS BAR (100% Content Preservation)
+            GOVERNMENT OFFICIAL TRADE PORTALS BAR
             ========================================================================= */}
-        <div className="mt-10 pt-6 border-t border-[#0a587d]/50 flex flex-wrap items-center justify-between gap-4 text-xs text-cyan-100/90">
+        <div className="mt-10 pt-6 border-t border-white/15 flex flex-wrap items-center justify-between gap-4 text-xs text-[#DDEBF7]">
           <div className="flex items-center gap-2">
             <span className="font-semibold text-white">
               {getFooterText('Official Trade Portals:', 'Imbuga z\'Ubucuruzi za Leta:', 'Milango Rasmi ya Biashara:', 'Portails Commerciaux Officiels :')}
@@ -519,7 +518,7 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
               ))}
             </div>
           </div>
-          <div className="text-[11px] text-cyan-200/80">
+          <div className="text-[11px] text-[#DDEBF7]/90">
             {t.footerAddress} · {t.footerEmail}
           </div>
         </div>
@@ -528,16 +527,12 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
       {/* =========================================================================
           SUBTLE HORIZONTAL DIVIDER
           ========================================================================= */}
-      <div className="relative z-10 w-full border-t border-[#0a587d]/70" />
+      <div className="relative z-10 w-full border-t border-white/15" />
 
       {/* =========================================================================
-          BOTTOM CENTERED SECTION:
-          - Official National Coat of Arms of Rwanda (Circular emblem)
-          - Centered text: "© 2026 Republic of Rwanda"
-          - Bottom Right: Crisp white Scroll-to-Top Button (↑)
+          BOTTOM CENTERED SECTION
           ========================================================================= */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-8 flex flex-col items-center justify-center text-center">
-        {/* Official Coat of Arms Emblem (Circular medallion) */}
         <div className="flex items-center justify-center mb-3">
           <img
             src={coatOfArmsSvg}
@@ -547,29 +542,23 @@ export const PublicFooter: React.FC<PublicFooterProps> = ({ onNavigate, currentL
           />
         </div>
 
-        {/* Centered Copyright Line matching template exactly */}
         <p className="text-white font-medium text-xs sm:text-[13px] tracking-wide mb-1">
           © 2026 Republic of Rwanda
         </p>
 
-        {/* Preserved Due Diligence Compliance Notice */}
-        <p className="text-cyan-200/70 text-[11px] max-w-xl mx-auto leading-relaxed">
+        <p className="text-[#DDEBF7]/85 text-[11px] max-w-xl mx-auto leading-relaxed">
           {t.dueDiligenceNotice}
         </p>
 
-        {/* =========================================================================
-            BOTTOM RIGHT CORNER: FLOATING / PINNED SCROLL-TO-TOP BUTTON (↑)
-            Matches the crisp white rectangular card with upward arrow in template
-            ========================================================================= */}
         <div className="absolute right-4 sm:right-8 bottom-6 sm:bottom-8 z-20">
           <button
             type="button"
             onClick={scrollToTop}
-            className="w-10 h-10 sm:w-11 sm:h-11 bg-white hover:bg-slate-100 text-[#004866] shadow-lg rounded-lg flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#00a2ea]"
+            className="w-10 h-10 sm:w-11 sm:h-11 bg-white hover:bg-[#DDEBF7] text-[#005A94] shadow-lg rounded-lg flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#DDEBF7]"
             aria-label="Scroll to top of page"
             title="Scroll to top"
           >
-            <ArrowUp className="w-5 h-5 text-[#004866] stroke-[2.5]" aria-hidden="true" />
+            <ArrowUp className="w-5 h-5 text-[#005A94] stroke-[2.5]" aria-hidden="true" />
           </button>
         </div>
       </div>

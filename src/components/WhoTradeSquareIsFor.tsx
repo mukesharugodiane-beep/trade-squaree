@@ -375,8 +375,8 @@ export const WhoTradeSquareIsFor: React.FC<WhoTradeSquareIsForProps> = ({
                 {/* -------------------------------------------------------------
                     TOP RIGHT BRAND BADGE
                     ------------------------------------------------------------- */}
-                <div className="absolute top-4 sm:top-6 right-4 sm:right-6 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-white shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-[#0096fc]" />
+                <div className="absolute top-4 sm:top-6 right-4 sm:right-6 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#005A94]/85 backdrop-blur-md border border-white/20 text-white shadow-md">
+                  <span className="w-2 h-2 rounded-full bg-[#DDEBF7]" />
                   <span className="text-[10px] sm:text-xs font-bold tracking-wider uppercase">
                     TRADE SQUARE
                   </span>
@@ -388,7 +388,7 @@ export const WhoTradeSquareIsFor: React.FC<WhoTradeSquareIsForProps> = ({
                 <div className="absolute bottom-0 inset-x-0 p-5 sm:p-8 md:p-10 flex flex-col justify-end text-white z-10">
                   {/* Category Pill Tag */}
                   <div className="mb-2">
-                    <span className="inline-block bg-[#0096fc]/90 backdrop-blur-xs text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+                    <span className="inline-block bg-[#005A94] backdrop-blur-xs text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs border border-white/20">
                       {itemCategory}
                     </span>
                   </div>
@@ -407,17 +407,17 @@ export const WhoTradeSquareIsFor: React.FC<WhoTradeSquareIsForProps> = ({
                       BOTTOM BAR (Action Pill Button + Metadata String)
                       ----------------------------------------------------------- */}
                   <div className="mt-4 sm:mt-6 flex items-center gap-3 sm:gap-4 flex-wrap">
-                    {/* Primary Button: White Pill ("[ Stream now ]" Style) */}
+                    {/* Primary Button: White Pill with #005A94 text */}
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         onNavigate(item.targetPage);
                       }}
-                      className="bg-white hover:bg-slate-100 text-slate-900 font-bold px-5 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm tracking-normal shadow-lg transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1.5"
+                      className="bg-white hover:bg-[#DDEBF7] text-[#005A94] font-bold px-5 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm tracking-normal shadow-lg transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1.5"
                     >
                       <span>{itemButtonLabel}</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-slate-900" />
+                      <ArrowRight className="w-3.5 h-3.5 text-[#005A94]" />
                     </button>
 
                     {/* Metadata line: Category in bold • Tagline */}
@@ -449,9 +449,9 @@ export const WhoTradeSquareIsFor: React.FC<WhoTradeSquareIsForProps> = ({
               key={idx}
               type="button"
               onClick={() => setActiveIndex(idx)}
-              className={`transition-all duration-300 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0096fc]/50 ${
+              className={`transition-all duration-300 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#005A94]/50 ${
                 isActive
-                  ? 'w-7 sm:w-8 h-2 bg-[#0096fc]'
+                  ? 'w-7 sm:w-8 h-2 bg-[#005A94]'
                   : 'w-2 h-2 bg-slate-300 hover:bg-slate-400'
               }`}
               aria-label={`Go to slide ${idx + 1}`}

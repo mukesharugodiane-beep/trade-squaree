@@ -54,6 +54,22 @@ export const HS_PRODUCTS: HSProduct[] = [
     unit: 'kg',
     defaultPriceRwfPerKg: 540,
     typicalMonthlyKg: 20000
+  },
+  {
+    hsCode: '0901',
+    name: 'Specialty Arabica Coffee (Green & Roasted)',
+    category: 'Coffee, Tea & Spices',
+    unit: 'kg',
+    defaultPriceRwfPerKg: 4200,
+    typicalMonthlyKg: 8000
+  },
+  {
+    hsCode: '0902',
+    name: 'Rwandan Highland Black Tea',
+    category: 'Coffee, Tea & Spices',
+    unit: 'kg',
+    defaultPriceRwfPerKg: 2850,
+    typicalMonthlyKg: 15000
   }
 ];
 
@@ -906,6 +922,406 @@ export const SEED_KENYAN_PARTNERS: KenyanPartner[] = [
         status: 'Verified',
         documentRef: 'BRS-REG-2018-40192',
         summary: 'Good standing certificate issued.'
+      }
+    ]
+  },
+  {
+    id: 'kp-13',
+    name: 'East Africa Specialty Coffee Roasters & Auction Hub Nairobi (sample)',
+    city: 'Nairobi',
+    country: 'Kenya',
+    role: 'Buyer',
+    evidenceLabel: 'Known trade activity',
+    source: 'Nairobi Coffee Exchange (NCE) & KRA ICMS Manifest',
+    updatedDate: '02 Sep 2026',
+    oneLineReason: 'Premier specialty Arabica blending & export roastery in Nairobi paying +24% higher premium for Rwandan Bourbon lots than Kampala transit brokers.',
+    stillToVerify: [
+      'Cupping score certificate (84+ SCA specialty grade) from NAEB',
+      'Direct vacuum-lined grainpro bag delivery schedule to Nairobi Industrial Area'
+    ],
+    handledProducts: [
+      {
+        hsCode: '0901',
+        productName: 'Specialty Arabica Coffee (Green & Roasted)',
+        minVolumeKgMonth: 100,
+        maxVolumeKgMonth: 25000,
+        targetBuyPriceKesPerKg: 545
+      },
+      {
+        hsCode: '0902',
+        productName: 'Rwandan Highland Black Tea',
+        minVolumeKgMonth: 500,
+        maxVolumeKgMonth: 30000,
+        targetBuyPriceKesPerKg: 355
+      },
+      {
+        hsCode: '0409',
+        productName: 'Natural Honey',
+        minVolumeKgMonth: 200,
+        maxVolumeKgMonth: 4000,
+        targetBuyPriceKesPerKg: 405
+      }
+    ],
+    acceptedCertifications: ['RSB S-Mark', 'Organic', 'GlobalG.A.P.', 'HACCP'],
+    contact: {
+      person: 'Dr. Kenneth Mwangi Githae',
+      phone: '+254 722 918 304',
+      email: 'sourcing@eacoffeeroasters.co.ke (sample)',
+      address: 'Haile Selassie Ave, Coffee Plaza 6th Fl, Nairobi'
+    },
+    kraPin: 'P051892341K',
+    corridorExperience: {
+      gatunaMalabaCrossingsCount: 54,
+      averageClearanceDays: 1.3,
+      lastShipmentDate: '29 Aug 2026',
+      onTimePaymentRatePct: 99,
+      yearsInCorridor: 7
+    },
+    evidenceRecords: [
+      {
+        source: 'KRA Customs ICMS & NAEB Export Log',
+        date: '29 Aug 2026',
+        status: 'Verified',
+        documentRef: 'KRA-NCE-2026-4410',
+        summary: 'Cleared 12,000 kg of Rwandan Bourbon Arabica via Gatuna–Malaba with 100% LC settlement on arrival.'
+      },
+      {
+        source: 'KEBS & Specialty Coffee Association Audit',
+        date: '14 Jul 2026',
+        status: 'Verified',
+        documentRef: 'KEBS-SCA-2026-119',
+        summary: 'Zero moisture rejection across 54 consecutive Rwandan consignments.'
+      }
+    ]
+  },
+  {
+    id: 'kp-14',
+    name: 'Bujumbura Tanganyika Hospitality & Commodity Import Corp (sample)',
+    city: 'Bujumbura',
+    country: 'Burundi',
+    role: 'Distributor',
+    evidenceLabel: 'Known trade activity',
+    source: 'OBR (Office Burundais des Recettes) & Nemba OSBP Manifest',
+    updatedDate: '01 Sep 2026',
+    oneLineReason: 'High-demand southern corridor distributor serving Bujumbura hotels, supermarkets, and regional off-takers with fast 0.9-day Nemba border clearance.',
+    stillToVerify: [
+      'BIF / USD cross-border settlement bank confirmation via BNR/BRB',
+      'Packaging French/English bilingual labeling compliance'
+    ],
+    handledProducts: [
+      {
+        hsCode: '0901',
+        productName: 'Specialty Arabica Coffee (Green & Roasted)',
+        minVolumeKgMonth: 100,
+        maxVolumeKgMonth: 12000,
+        targetBuyPriceKesPerKg: 525
+      },
+      {
+        hsCode: '1102',
+        productName: 'Maize Flour',
+        minVolumeKgMonth: 2000,
+        maxVolumeKgMonth: 35000,
+        targetBuyPriceKesPerKg: 82
+      },
+      {
+        hsCode: '0713',
+        productName: 'Dried Beans',
+        minVolumeKgMonth: 2000,
+        maxVolumeKgMonth: 28000,
+        targetBuyPriceKesPerKg: 96
+      },
+      {
+        hsCode: '0409',
+        productName: 'Natural Honey',
+        minVolumeKgMonth: 200,
+        maxVolumeKgMonth: 3500,
+        targetBuyPriceKesPerKg: 410
+      }
+    ],
+    acceptedCertifications: ['RSB S-Mark', 'HACCP', 'Organic'],
+    contact: {
+      person: 'Jean-Bosco Ndayishimiye',
+      phone: '+257 79 912 440',
+      email: 'procurement@tanganyikacorp.bi (sample)',
+      address: 'Chaussée du Peuple Murundi, Quartier Industriel, Bujumbura'
+    },
+    kraPin: 'NIF-400192837B',
+    corridorExperience: {
+      gatunaMalabaCrossingsCount: 38,
+      averageClearanceDays: 0.9,
+      lastShipmentDate: '27 Aug 2026',
+      onTimePaymentRatePct: 97,
+      yearsInCorridor: 5
+    },
+    evidenceRecords: [
+      {
+        source: 'OBR Customs & Nemba OSBP Trade Registry',
+        date: '27 Aug 2026',
+        status: 'Verified',
+        documentRef: 'OBR-NEM-2026-3091',
+        summary: 'Cleared 18 tonnes of Rwandan agro-processed goods and roasted coffee in under 24 hours.'
+      },
+      {
+        source: 'East African Community Certificate of Origin Log',
+        date: '05 Aug 2026',
+        status: 'Verified',
+        documentRef: 'EAC-COO-RW-BI-882',
+        summary: 'Verified 0% duty EAC preferential origin trade history.'
+      }
+    ]
+  },
+  {
+    id: 'kp-15',
+    name: 'Kampala Victoria Basin Produce & Transit Brokers Ltd (sample)',
+    city: 'Kampala',
+    country: 'Uganda',
+    role: 'Wholesaler',
+    evidenceLabel: 'Trade Square registered',
+    source: 'URA Asycuda World & Gatuna OSBP Transit Log',
+    updatedDate: '25 Aug 2026',
+    oneLineReason: 'Kampala wholesale aggregator at Nakasero & Kisenyi markets; high domestic surplus in coffee and raw maize results in lower buy prices than Kenya or Burundi.',
+    stillToVerify: [
+      'UNBS import permit pre-notification for packaged food lots',
+      'Escrow or bank guarantee terms for first-time Rwandan suppliers'
+    ],
+    handledProducts: [
+      {
+        hsCode: '0901',
+        productName: 'Specialty Arabica Coffee (Green & Roasted)',
+        minVolumeKgMonth: 100,
+        maxVolumeKgMonth: 15000,
+        targetBuyPriceKesPerKg: 430
+      },
+      {
+        hsCode: '0713',
+        productName: 'Dried Beans',
+        minVolumeKgMonth: 2000,
+        maxVolumeKgMonth: 25000,
+        targetBuyPriceKesPerKg: 84
+      },
+      {
+        hsCode: '0804',
+        productName: 'Fresh Avocado (Hass & Fuerte)',
+        minVolumeKgMonth: 1000,
+        maxVolumeKgMonth: 14000,
+        targetBuyPriceKesPerKg: 98
+      },
+      {
+        hsCode: '1106',
+        productName: 'High Quality Cassava Flour',
+        minVolumeKgMonth: 2000,
+        maxVolumeKgMonth: 18000,
+        targetBuyPriceKesPerKg: 66
+      }
+    ],
+    acceptedCertifications: ['RSB S-Mark', 'HACCP'],
+    contact: {
+      person: 'Ronald Mugisha Ssekandi',
+      phone: '+256 772 518 920',
+      email: 'r.ssekandi@victoriaproduce.co.ug (sample)',
+      address: 'Plot 19 Jinja Road, Industrial Area, Kampala'
+    },
+    kraPin: 'TIN-100948271U',
+    corridorExperience: {
+      gatunaMalabaCrossingsCount: 29,
+      averageClearanceDays: 1.5,
+      lastShipmentDate: '21 Aug 2026',
+      onTimePaymentRatePct: 91,
+      yearsInCorridor: 4
+    },
+    evidenceRecords: [
+      {
+        source: 'URA Gatuna OSBP Customs Manifest',
+        date: '21 Aug 2026',
+        status: 'Verified',
+        documentRef: 'URA-GAT-2026-7721',
+        summary: 'Cleared 10 tonnes of Rwandan dry beans and horticultural produce at Gatuna OSBP.'
+      }
+    ]
+  },
+  {
+    id: 'kp-16',
+    name: 'Mombasa Tea & Specialty Beverage Consortium Ltd (sample)',
+    city: 'Mombasa',
+    country: 'Kenya',
+    role: 'Buyer',
+    evidenceLabel: 'Known trade activity',
+    source: 'EATTA Mombasa Auction & KRA Port Manifest',
+    updatedDate: '01 Sep 2026',
+    oneLineReason: 'Major East African tea and specialty coffee buyer in Mombasa with 61 completed Rwandan corridor shipments and immediate USD/KES settlement.',
+    stillToVerify: [
+      'Palletized moisture-barrier wrapping for Mombasa coastal humidity',
+      'EATTA / NAEB lot grading sheet prior to dispatch'
+    ],
+    handledProducts: [
+      {
+        hsCode: '0902',
+        productName: 'Rwandan Highland Black Tea',
+        minVolumeKgMonth: 500,
+        maxVolumeKgMonth: 45000,
+        targetBuyPriceKesPerKg: 370
+      },
+      {
+        hsCode: '0901',
+        productName: 'Specialty Arabica Coffee (Green & Roasted)',
+        minVolumeKgMonth: 100,
+        maxVolumeKgMonth: 20000,
+        targetBuyPriceKesPerKg: 538
+      }
+    ],
+    acceptedCertifications: ['RSB S-Mark', 'HACCP', 'Organic', 'GlobalG.A.P.'],
+    contact: {
+      person: 'Amina Hassan Juma',
+      phone: '+254 711 309 842',
+      email: 'trading@mombasabeverage.co.ke (sample)',
+      address: 'Nkrumah Road, Tea Trade Centre, Mombasa'
+    },
+    kraPin: 'P051339012M',
+    corridorExperience: {
+      gatunaMalabaCrossingsCount: 61,
+      averageClearanceDays: 1.6,
+      lastShipmentDate: '30 Aug 2026',
+      onTimePaymentRatePct: 99,
+      yearsInCorridor: 8
+    },
+    evidenceRecords: [
+      {
+        source: 'East African Tea Trade Association (EATTA) Log',
+        date: '30 Aug 2026',
+        status: 'Verified',
+        documentRef: 'EATTA-MSA-2026-9012',
+        summary: 'Purchased 24 MT of Rwandan highland Orthodox & CTC black tea and 4 MT specialty Arabica.'
+      }
+    ]
+  },
+  {
+    id: 'kp-17',
+    name: 'Goma Kivu Cross-Border Agro-Import Syndicate SARL (sample)',
+    city: 'Goma',
+    country: 'DRC',
+    role: 'Wholesaler',
+    evidenceLabel: 'Known trade activity',
+    source: 'DGDA La Corniche / Rubavu OSBP Manifest & MINICOM Cross-Border Hub',
+    updatedDate: '02 Sep 2026',
+    oneLineReason: 'High-frequency Great Lakes cross-border buyer at Rubavu–Goma border post with strong demand for Rwandan maize flour, cassava flour, and dry beans.',
+    stillToVerify: [
+      'OCC (Office Congolais de Contrôle) lot inspection scheduling at Rubavu',
+      'USD cash-against-documents settlement at BNR/Rawbank border branch'
+    ],
+    handledProducts: [
+      {
+        hsCode: '1102',
+        productName: 'Maize Flour',
+        minVolumeKgMonth: 1000,
+        maxVolumeKgMonth: 50000,
+        targetBuyPriceKesPerKg: 85
+      },
+      {
+        hsCode: '1106',
+        productName: 'High Quality Cassava Flour',
+        minVolumeKgMonth: 1000,
+        maxVolumeKgMonth: 40000,
+        targetBuyPriceKesPerKg: 76
+      },
+      {
+        hsCode: '0713',
+        productName: 'Dried Beans',
+        minVolumeKgMonth: 1000,
+        maxVolumeKgMonth: 35000,
+        targetBuyPriceKesPerKg: 94
+      }
+    ],
+    acceptedCertifications: ['RSB S-Mark', 'HACCP'],
+    contact: {
+      person: 'Dieudonné Kambale Mbuyi',
+      phone: '+243 998 412 090',
+      email: 'import@kivusyndicate.cd (sample)',
+      address: 'Avenue du Port, Quartier Les Volcans, Goma'
+    },
+    kraPin: 'RCCM-GOM-2019-B412',
+    corridorExperience: {
+      gatunaMalabaCrossingsCount: 74,
+      averageClearanceDays: 0.7,
+      lastShipmentDate: '01 Sep 2026',
+      onTimePaymentRatePct: 96,
+      yearsInCorridor: 6
+    },
+    evidenceRecords: [
+      {
+        source: 'Rubavu–La Corniche OSBP Daily Cargo Ledger',
+        date: '01 Sep 2026',
+        status: 'Verified',
+        documentRef: 'RRA-RUB-2026-1184',
+        summary: 'Cleared 32 tonnes of fortified maize flour and cassava flour from Rubavu cross-border market.'
+      }
+    ]
+  },
+  {
+    id: 'kp-18',
+    name: 'Arusha & Dar es Salaam Central Corridor Commodity Clearing Ltd (sample)',
+    city: 'Arusha',
+    country: 'Tanzania',
+    role: 'Distributor',
+    evidenceLabel: 'Business identity verified',
+    source: 'TRA Rusumo OSBP Customs Register & TBS Standards Log',
+    updatedDate: '28 Aug 2026',
+    oneLineReason: 'Central Corridor distributor importing specialty Rwandan coffee, honey, and highland tea via Rusumo OSBP for northern Tanzania safari lodges and Dar port.',
+    stillToVerify: [
+      'TBS (Tanzania Bureau of Standards) mutual recognition certificate filing',
+      'Rusumo OSBP transit bond allocation for container lots'
+    ],
+    handledProducts: [
+      {
+        hsCode: '0901',
+        productName: 'Specialty Arabica Coffee (Green & Roasted)',
+        minVolumeKgMonth: 100,
+        maxVolumeKgMonth: 18000,
+        targetBuyPriceKesPerKg: 515
+      },
+      {
+        hsCode: '0902',
+        productName: 'Rwandan Highland Black Tea',
+        minVolumeKgMonth: 500,
+        maxVolumeKgMonth: 25000,
+        targetBuyPriceKesPerKg: 348
+      },
+      {
+        hsCode: '0409',
+        productName: 'Natural Honey',
+        minVolumeKgMonth: 200,
+        maxVolumeKgMonth: 5000,
+        targetBuyPriceKesPerKg: 398
+      },
+      {
+        hsCode: '0804',
+        productName: 'Fresh Avocado (Hass & Fuerte)',
+        minVolumeKgMonth: 1000,
+        maxVolumeKgMonth: 16000,
+        targetBuyPriceKesPerKg: 112
+      }
+    ],
+    acceptedCertifications: ['RSB S-Mark', 'Organic', 'GlobalG.A.P.'],
+    contact: {
+      person: 'Neema Mwakasege Lyimo',
+      phone: '+255 754 819 302',
+      email: 'n.lyimo@centralcorridorcommodities.co.tz (sample)',
+      address: 'Sokoine Road, AICC Commercial Wing, Arusha'
+    },
+    kraPin: 'TIN-118-492-039TZ',
+    corridorExperience: {
+      gatunaMalabaCrossingsCount: 33,
+      averageClearanceDays: 1.4,
+      lastShipmentDate: '25 Aug 2026',
+      onTimePaymentRatePct: 95,
+      yearsInCorridor: 5
+    },
+    evidenceRecords: [
+      {
+        source: 'TRA & RRA Rusumo OSBP Joint Manifest',
+        date: '25 Aug 2026',
+        status: 'Verified',
+        documentRef: 'TRA-RUS-2026-5520',
+        summary: 'Cleared 14 tonnes of Rwandan specialty Arabica coffee and highland tea via Rusumo OSBP.'
       }
     ]
   }

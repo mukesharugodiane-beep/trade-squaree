@@ -1,14 +1,10 @@
 /**
  * TradeChat Component
- * Fixed, animated chatbot interface positioned in the center of the dashboard.
- * - Uses framer-motion to replicate the smooth, pulsing expansion animation found in OpenAI's Voice Mode.
- * - Idle State: Displays a compact, professional floating bubble in the center of the dashboard with
- *   a live pulsing OpenAI-style fluid orb, concentric acoustic rings, and active session turn badge.
- * - Active / Clicked State: Smoothly expands via spring layout animation into an authentic
- *   OpenAI Voice Mode listening pulse and a simplified, executive business-focused conversational view.
- * - State-Managed Chat History: Tracks all conversational turns and multi-session threads during
- *   the user's session (backed by sessionStorage) so users can inspect, replay, switch between,
- *   and resume any previous conversational turns.
+ * Fixed in the top-right corner of the dashboard (`fixed top-2 sm:top-2.5 right-3 sm:right-5 z-50`).
+ * - Idle State: Displays the pulsing OpenAI Voice-Mode fluid orb AI icon fixed in the top-right corner.
+ * - Active / Opened State: Smoothly expands right there in the top-right corner (`origin-top-right`)
+ *   using framer-motion into the OpenAI Voice Mode listening animation and simplified business
+ *   conversational view with state-managed multi-turn session history.
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -108,9 +104,9 @@ export const TradeChat: React.FC<TradeChatProps> = ({
   const capacityKg = opportunity?.capacityKgMonth || 20000;
   const exWorksRwf = opportunity?.exWorksPriceRwf || 950;
 
-  // Idle (small professional bubble) vs Active (expanded business conversational view)
+  // Idle (fixed top-right AI orb icon) vs Active (opened in the top-right corner)
   const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
-  // OpenAI Voice Mode overlay state inside the expanded view
+  // OpenAI Voice Mode overlay state inside the expanded top-right view
   const [isVoiceActive, setIsVoiceActive] = useState<boolean>(false);
   const [voicePhase, setVoicePhase] = useState<VoicePhase>('coalescing');
   const [voiceTranscript, setVoiceTranscript] = useState<string>('');
@@ -148,7 +144,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
     sessions.find((s) => s.id === activeSessionId) || sessions[0];
   const messages = activeSession?.messages || [];
 
-  // Total turns across the active session (1 user + 1 assistant = 1 exchange turn, or count of messages)
+  // Total turns across the active session
   const activeTurnCount = Math.ceil(messages.length / 2);
   const totalSavedSessionsCount = sessions.filter((s) => s.messages.length > 0).length;
 
@@ -170,7 +166,18 @@ export const TradeChat: React.FC<TradeChatProps> = ({
   }, [messages.length, isTyping, isHistoryOpen, isVoiceActive]);
 
   useEffect(() => {
+    const handleExternalOpen = (e: Event) => {
+      const customEvent = e as CustomEvent<{ voice?: boolean }>;
+      setIsOpen(true);
+      setIsHistoryOpen(false);
+      if (customEvent.detail?.voice) {
+        setIsVoiceActive(true);
+        setVoicePhase('coalescing');
+      }
+    };
+    window.addEventListener('open-trade-chat', handleExternalOpen);
     return () => {
+      window.removeEventListener('open-trade-chat', handleExternalOpen);
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
@@ -204,7 +211,6 @@ export const TradeChat: React.FC<TradeChatProps> = ({
 
   // Start a new conversation session while preserving all previous sessions in state history
   const handleStartNewSession = () => {
-    // If current session is already empty, just switch to chat view
     if (messages.length === 0) {
       setIsHistoryOpen(false);
       setIsVoiceActive(false);
@@ -249,13 +255,10 @@ export const TradeChat: React.FC<TradeChatProps> = ({
     setIsHistoryOpen(false);
   };
 
-  // Expand from Idle Bubble -> OpenAI Voice Pulse -> Simplified Business Chat
+  // Expand from Fixed Top-Right AI Icon -> OpenAI Voice Pulse -> Simplified Business Chat in Top-Right
   const handleExpandFromBubble = (startInVoice = false) => {
     setIsOpen(true);
     setIsHistoryOpen(false);
-
-    // If user already has turns in the active session and didn't explicitly click the voice icon,
-    // open directly to their conversation turns after a crisp 900ms voice-orb pulse
     setIsVoiceActive(true);
     setVoicePhase('coalescing');
     setVoiceTranscript('');
@@ -265,7 +268,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
     }, 450);
 
     if (!startInVoice) {
-      const delayMs = messages.length > 0 ? 1050 : 1650;
+      const delayMs = messages.length > 0 ? 1000 : 1550;
       const t2 = setTimeout(() => {
         setIsVoiceActive(false);
       }, delayMs);
@@ -357,7 +360,6 @@ export const TradeChat: React.FC<TradeChatProps> = ({
       mode
     };
 
-    // Build history payload of previous turns before appending
     const priorHistory = messages.map((m) => ({
       role: m.role,
       content: m.content
@@ -442,81 +444,68 @@ export const TradeChat: React.FC<TradeChatProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 lg:left-56 top-14 sm:top-16 z-30 pointer-events-none flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 pointer-events-none flex flex-col items-end justify-end">
       <AnimatePresence mode="wait">
         {!isOpen ? (
           /* =====================================================================
-              STATE 1: IDLE — SMALL PROFESSIONAL PULSING VOICE-MODE BUBBLE
-              Positioned in the center of the dashboard; expands on click
+              STATE 1: IDLE — FIXED BOTTOM-RIGHT PULSING AI ICON / ORB BUBBLE
+              Fixed in the bottom-right corner of the dashboard; opens right there
               ===================================================================== */
           <motion.div
-            key="idle-bubble"
+            key="idle-bubble-bottom-right"
             layoutId="trade-chat-shell"
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ type: 'spring', stiffness: 280, damping: 24 }}
-            className="pointer-events-auto relative flex flex-col items-center justify-center group"
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            className="pointer-events-auto relative flex items-center justify-center origin-bottom-right"
           >
-            {/* Outer OpenAI Voice-Mode Pulsing Aura Rings */}
+            {/* Outer OpenAI Voice-Mode Pulsing Aura Ring */}
             <motion.div
               animate={{
                 scale: [1, 1.32, 1],
-                opacity: [0.28, 0.04, 0.28]
+                opacity: [0.32, 0.05, 0.32]
               }}
               transition={{
-                duration: 2.8,
+                duration: 2.6,
                 repeat: Infinity,
                 ease: 'easeInOut'
               }}
-              className="absolute w-28 h-28 rounded-full bg-gradient-to-tr from-[#005A94]/30 via-[#0096FC]/25 to-[#38BDF8]/30 blur-md pointer-events-none"
+              className="absolute -inset-2 rounded-full bg-gradient-to-tr from-[#005A94]/35 via-[#0096FC]/30 to-[#38BDF8]/35 blur-xs pointer-events-none"
             />
 
-            <motion.div
-              animate={{
-                scale: [1.02, 1.18, 1.02],
-                opacity: [0.35, 0.08, 0.35]
-              }}
-              transition={{
-                duration: 2.2,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 0.3
-              }}
-              className="absolute w-24 h-24 rounded-full border border-[#0096FC]/35 pointer-events-none"
-            />
-
-            {/* Main Interactive Bubble Button */}
+            {/* Main Fixed Bottom-Right AI Icon Button */}
             <motion.button
               type="button"
               onClick={() => handleExpandFromBubble(false)}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              className="relative flex items-center gap-3.5 pl-2.5 pr-4 py-2.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-[0_14px_40px_rgba(0,90,148,0.22)] hover:border-[#005A94]/50 transition-colors cursor-pointer"
-              aria-label="Open Trade Square AI Assistant"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative flex items-center gap-2.5 pl-2 pr-3.5 py-2 rounded-full bg-white/95 backdrop-blur-md border border-[#005A94]/25 shadow-[0_12px_36px_rgba(0,90,148,0.26)] hover:border-[#005A94] transition-colors cursor-pointer"
+              aria-label="Open Trade Square AI in bottom right corner"
+              title="Open Trade Square AI Assistant"
             >
               {/* Signature OpenAI Fluid Cloud Orb */}
               <motion.div
                 layoutId="trade-chat-orb"
                 animate={{
-                  scale: [1, 1.06, 0.97, 1],
+                  scale: [1, 1.07, 0.96, 1],
                   borderRadius: [
                     '50% 50% 50% 50%',
-                    '46% 54% 48% 52%',
+                    '45% 55% 48% 52%',
                     '53% 47% 54% 46%',
                     '50% 50% 50% 50%'
                   ]
                 }}
                 transition={{
-                  duration: 3.2,
+                  duration: 3.0,
                   repeat: Infinity,
                   ease: 'easeInOut'
                 }}
-                className="relative w-11 h-11 rounded-full overflow-hidden shadow-[0_4px_16px_rgba(0,150,252,0.45)] bg-[#005A94] shrink-0"
+                className="relative w-10 h-10 rounded-full overflow-hidden shadow-[0_4px_14px_rgba(0,150,252,0.45)] bg-[#005A94] shrink-0"
               >
                 <motion.div
                   animate={{ rotate: 360, scale: [1, 1.15, 1] }}
-                  transition={{ duration: 6.5, repeat: Infinity, ease: 'linear' }}
+                  transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
                   className="absolute -inset-2 rounded-full opacity-90"
                   style={{
                     background:
@@ -525,8 +514,8 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                 />
                 <motion.div
                   animate={{ rotate: -360 }}
-                  transition={{ duration: 8.5, repeat: Infinity, ease: 'linear' }}
-                  className="absolute -inset-3 rounded-full mix-blend-screen opacity-80"
+                  transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                  className="absolute -inset-2.5 rounded-full mix-blend-screen opacity-85"
                   style={{
                     background:
                       'radial-gradient(circle at 70% 65%, #E0F2FE 0%, #38BDF8 38%, #003893 75%, transparent 88%)'
@@ -534,55 +523,54 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                 />
               </motion.div>
 
-              {/* Concise Professional Business Label + Active Session Turn Indicator */}
-              <div className="text-left pr-1">
+              {/* Compact Label & Turn Badge */}
+              <div className="flex flex-col text-left leading-tight">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-bold text-slate-900 tracking-tight">
-                    Trade Square AI
+                    Trade AI
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   {activeTurnCount > 0 && (
-                    <span className="px-1.5 py-0.2 rounded bg-[#DDEBF7] text-[#005A94] text-[10px] font-semibold tabular-nums">
-                      {activeTurnCount} {activeTurnCount === 1 ? 'turn' : 'turns'}
+                    <span className="px-1.5 py-0.2 rounded bg-[#DDEBF7] text-[#005A94] text-[9px] font-bold tabular-nums">
+                      {activeTurnCount}
                     </span>
                   )}
                 </div>
-                <span className="block text-[11px] text-slate-500 font-medium">
-                  {activeTurnCount > 0
-                    ? 'Tap to resume conversation'
-                    : 'Tap to open · Corridor Copilot'}
+                <span className="text-[10px] text-slate-500 font-medium">
+                  Voice & Chat
                 </span>
               </div>
 
-              {/* Quick Voice Mode Trigger Pill */}
+              {/* Direct Voice Trigger Icon */}
               <div
                 onClick={(e) => {
                   e.stopPropagation();
                   handleExpandFromBubble(true);
                 }}
-                className="w-8 h-8 rounded-full bg-[#F2F4F7] hover:bg-[#DDEBF7] text-[#005A94] flex items-center justify-center transition-colors"
+                className="w-7 h-7 rounded-full bg-[#F2F4F7] hover:bg-[#DDEBF7] text-[#005A94] flex items-center justify-center transition-colors"
                 title="Start live voice conversation"
               >
-                <AudioLines className="w-4 h-4" />
+                <AudioLines className="w-3.5 h-3.5" />
               </div>
             </motion.button>
           </motion.div>
         ) : (
           /* =====================================================================
-              STATE 2: EXPANDED — OPENAI VOICE PULSE, TURN THREAD & SESSION HISTORY
+              STATE 2: EXPANDED IN THE BOTTOM-RIGHT CORNER OF THE DASHBOARD
+              Opens directly upward from the bottom-right AI icon (`origin-bottom-right`)
               ===================================================================== */
           <motion.div
-            key="expanded-chat"
+            key="expanded-chat-bottom-right"
             layoutId="trade-chat-shell"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 26 }}
-            className="pointer-events-auto w-full max-w-xl bg-white/98 backdrop-blur-xl border border-slate-200/90 rounded-2xl shadow-[0_20px_60px_rgba(15,23,42,0.16)] flex flex-col justify-between overflow-hidden max-h-[580px]"
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 10 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 26 }}
+            className="pointer-events-auto w-[calc(100vw-2rem)] sm:w-[400px] md:w-[430px] bg-white/98 backdrop-blur-xl border border-slate-200/95 rounded-2xl shadow-[0_20px_60px_rgba(15,23,42,0.22)] flex flex-col justify-between overflow-hidden max-h-[calc(100vh-5.5rem)] sm:max-h-[560px] origin-bottom-right"
           >
             {/* Minimal Executive Top Header */}
-            <div className="px-4 sm:px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-[#F8FAFC] gap-2">
-              <div className="flex items-center gap-2.5 min-w-0">
+            <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-[#F8FAFC] gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 {/* Miniature Live Fluid Orb */}
                 <motion.button
                   type="button"
@@ -601,20 +589,19 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                   />
                 </motion.button>
 
-                <div className="flex items-center gap-2 truncate">
+                <div className="flex items-center gap-1.5 truncate">
                   <span className="text-xs font-bold text-slate-900">
                     Trade Square AI
                   </span>
                   <span className="text-slate-300">·</span>
                   <span className="text-[11px] text-slate-500 truncate">
-                    {businessName} (HS {productHs})
+                    HS {productHs}
                   </span>
                 </div>
               </div>
 
-              {/* Right Header Controls: Session History, New Chat, Minimize */}
+              {/* Right Header Controls: Session History, New Chat, Minimize to Top-Right Icon */}
               <div className="flex items-center gap-1 shrink-0">
-                {/* Session Turn History Button */}
                 <button
                   type="button"
                   onClick={() => {
@@ -637,25 +624,23 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                   )}
                 </button>
 
-                {/* New Conversation Session Button */}
                 {messages.length > 0 && (
                   <button
                     type="button"
                     onClick={handleStartNewSession}
                     className="p-1.5 rounded-md text-slate-500 hover:text-[#005A94] hover:bg-slate-200/60 transition-colors cursor-pointer"
-                    title="Start new conversation (saves current turns to history)"
+                    title="Start new conversation"
                     aria-label="New conversation"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
                 )}
 
-                {/* Minimize to Idle Bubble */}
                 <button
                   type="button"
                   onClick={handleMinimizeToBubble}
                   className="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-200/60 transition-colors cursor-pointer"
-                  title="Minimize to bubble"
+                  title="Minimize to top-right AI icon"
                   aria-label="Minimize chatbot"
                 >
                   <Minimize2 className="w-3.5 h-3.5" />
@@ -668,8 +653,6 @@ export const TradeChat: React.FC<TradeChatProps> = ({
               {isHistoryOpen ? (
                 /* -----------------------------------------------------------------
                     SESSION & CONVERSATIONAL TURN HISTORY VIEW
-                    Allows viewing previous turns in the active session or switching
-                    across all saved sessions from this browser session.
                     ----------------------------------------------------------------- */
                 <motion.div
                   key="session-history-view"
@@ -677,15 +660,15 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.2 }}
-                  className="flex-1 overflow-y-auto px-5 py-4 flex flex-col min-h-[340px] max-h-[430px] space-y-4"
+                  className="flex-1 overflow-y-auto px-4 py-3.5 flex flex-col min-h-[320px] max-h-[410px] space-y-3.5"
                 >
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                     <div>
                       <h3 className="text-xs font-bold text-slate-900">
-                        Session Conversation History
+                        Session History
                       </h3>
-                      <p className="text-[11px] text-slate-500">
-                        Review previous conversational turns or resume an earlier thread
+                      <p className="text-[10px] text-slate-500">
+                        Previous conversational turns in your session
                       </p>
                     </div>
 
@@ -693,16 +676,16 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                       <button
                         type="button"
                         onClick={handleStartNewSession}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#005A94] hover:bg-[#004876] text-white text-[11px] font-medium transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-[#005A94] hover:bg-[#004876] text-white text-[10px] font-medium transition-colors cursor-pointer"
                       >
                         <Plus className="w-3 h-3" />
-                        <span>New Chat</span>
+                        <span>New</span>
                       </button>
                       {totalSavedSessionsCount > 0 && (
                         <button
                           type="button"
                           onClick={handleClearAllHistory}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-500 hover:text-red-600 text-[11px] transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-500 hover:text-red-600 text-[10px] transition-colors cursor-pointer"
                           title="Clear all session history"
                         >
                           <RotateCcw className="w-3 h-3" />
@@ -722,7 +705,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                           onClick={() => setIsHistoryOpen(false)}
                           className="text-[#005A94] hover:underline normal-case font-medium cursor-pointer"
                         >
-                          Return to active thread →
+                          Back to chat →
                         </button>
                       </div>
 
@@ -737,7 +720,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                             <div
                               key={userTurn.id}
                               onClick={() => setIsHistoryOpen(false)}
-                              className="p-3 rounded-xl border border-slate-200/90 bg-slate-50/70 hover:bg-white hover:border-[#005A94]/40 transition-colors cursor-pointer space-y-1.5"
+                              className="p-2.5 rounded-xl border border-slate-200/90 bg-slate-50/70 hover:bg-white hover:border-[#005A94]/40 transition-colors cursor-pointer space-y-1"
                             >
                               <div className="flex items-center justify-between gap-2 text-[10px] text-slate-500">
                                 <div className="flex items-center gap-1.5">
@@ -745,7 +728,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                                     Turn #{turnNum}
                                   </span>
                                   <span className="uppercase font-medium text-slate-400">
-                                    {userTurn.mode === 'voice' ? 'Voice Turn' : 'Text Turn'}
+                                    {userTurn.mode === 'voice' ? 'Voice' : 'Text'}
                                   </span>
                                 </div>
                                 <span className="font-mono tabular-nums flex items-center gap-1">
@@ -754,7 +737,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                                 </span>
                               </div>
 
-                              <div className="text-xs font-semibold text-slate-900">
+                              <div className="text-[11px] font-semibold text-slate-900">
                                 Q: {userTurn.content}
                               </div>
 
@@ -777,17 +760,14 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                     </div>
 
                     {sessions.filter((s) => s.messages.length > 0).length === 0 ? (
-                      <div className="py-10 text-center space-y-2 border border-dashed border-slate-200 rounded-xl">
-                        <MessageSquare className="w-5 h-5 text-slate-300 mx-auto" />
+                      <div className="py-8 text-center space-y-1.5 border border-dashed border-slate-200 rounded-xl">
+                        <MessageSquare className="w-4 h-4 text-slate-300 mx-auto" />
                         <p className="text-xs font-medium text-slate-600">
-                          No conversational turns recorded yet in this session.
-                        </p>
-                        <p className="text-[11px] text-slate-400">
-                          Ask a trade question or use Voice Mode to build your session history.
+                          No conversational turns yet.
                         </p>
                       </div>
                     ) : (
-                      <div className="space-y-2">
+                      <div className="space-y-1.5">
                         {sessions
                           .filter((s) => s.messages.length > 0)
                           .map((sess) => {
@@ -799,15 +779,15 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                               <div
                                 key={sess.id}
                                 onClick={() => handleSelectSession(sess.id)}
-                                className={`p-3 rounded-xl border transition-colors cursor-pointer flex items-start justify-between gap-3 ${
+                                className={`p-2.5 rounded-xl border transition-colors cursor-pointer flex items-start justify-between gap-2.5 ${
                                   isCurrent
                                     ? 'bg-[#DDEBF7]/35 border-[#005A94]/50'
                                     : 'bg-white border-slate-200/80 hover:border-slate-300'
                                 }`}
                               >
-                                <div className="min-w-0 flex-1 space-y-1">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-xs font-semibold text-slate-900 truncate">
+                                <div className="min-w-0 flex-1 space-y-0.5">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-[11px] font-semibold text-slate-900 truncate">
                                       {sess.title}
                                     </span>
                                     {isCurrent && (
@@ -818,30 +798,28 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                                   </div>
 
                                   {lastMsg && (
-                                    <p className="text-[11px] text-slate-500 line-clamp-1">
+                                    <p className="text-[10px] text-slate-500 line-clamp-1">
                                       {lastMsg.content}
                                     </p>
                                   )}
 
-                                  <div className="flex items-center gap-2 text-[10px] text-slate-400 font-mono tabular-nums">
+                                  <div className="flex items-center gap-1.5 text-[9px] text-slate-400 font-mono tabular-nums">
                                     <span>
                                       {turnTotal} {turnTotal === 1 ? 'turn' : 'turns'}
                                     </span>
                                     <span>·</span>
-                                    <span>HS {sess.productHs}</span>
-                                    <span>·</span>
-                                    <span>Updated {sess.updatedAt}</span>
+                                    <span>{sess.updatedAt}</span>
                                   </div>
                                 </div>
 
                                 <button
                                   type="button"
                                   onClick={(e) => handleDeleteSession(sess.id, e)}
-                                  className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer shrink-0"
+                                  className="p-1 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer shrink-0"
                                   title="Remove session"
                                   aria-label="Remove session"
                                 >
-                                  <Trash2 className="w-3.5 h-3.5" />
+                                  <Trash2 className="w-3 h-3" />
                                 </button>
                               </div>
                             );
@@ -860,7 +838,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="flex-1 min-h-[360px] flex flex-col items-center justify-between py-6 px-6 select-none"
+                  className="flex-1 min-h-[330px] flex flex-col items-center justify-between py-5 px-5 select-none"
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
@@ -872,7 +850,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                         onClick={() => setIsVoiceActive(false)}
                         className="px-2 py-0.5 rounded-full bg-[#DDEBF7] text-[#005A94] text-[10px] font-semibold hover:bg-[#005A94] hover:text-white transition-colors cursor-pointer"
                       >
-                        View {activeTurnCount} previous {activeTurnCount === 1 ? 'turn' : 'turns'} →
+                        {activeTurnCount} {activeTurnCount === 1 ? 'turn' : 'turns'} →
                       </button>
                     )}
                   </div>
@@ -890,13 +868,13 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                             rotate: { duration: 2.2, repeat: Infinity, ease: 'linear' },
                             scale: { duration: 0.25 }
                           }}
-                          className="w-32 h-32 flex items-center justify-center gap-2"
+                          className="w-28 h-28 flex items-center justify-center gap-2"
                         >
                           {[0, 1, 2, 3].map((i) => (
                             <motion.span
                               key={i}
                               animate={{
-                                height: [18, 40, 18],
+                                height: [16, 36, 16],
                                 scale: [0.95, 1.1, 0.95]
                               }}
                               transition={{
@@ -905,7 +883,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                                 delay: i * 0.13,
                                 ease: 'easeInOut'
                               }}
-                              className="w-4 rounded-full bg-gradient-to-b from-[#38BDF8] via-[#0096FC] to-[#005A94] shadow-[0_0_16px_rgba(0,150,252,0.4)]"
+                              className="w-3.5 rounded-full bg-gradient-to-b from-[#38BDF8] via-[#0096FC] to-[#005A94] shadow-[0_0_16px_rgba(0,150,252,0.4)]"
                             />
                           ))}
                         </motion.div>
@@ -918,7 +896,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                               true
                             )
                           }
-                          className="relative w-36 h-36 sm:w-40 sm:h-40 flex items-center justify-center cursor-pointer"
+                          className="relative w-32 h-32 flex items-center justify-center cursor-pointer"
                           title="Speak now or tap the orb"
                         >
                           {/* Pulsing Acoustic Rings */}
@@ -975,7 +953,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                               repeat: Infinity,
                               ease: 'easeInOut'
                             }}
-                            className="relative w-28 h-28 sm:w-32 sm:h-32 overflow-hidden shadow-[0_14px_40px_rgba(0,90,148,0.36)] bg-[#005A94]"
+                            className="relative w-24 h-24 overflow-hidden shadow-[0_14px_40px_rgba(0,90,148,0.36)] bg-[#005A94]"
                           >
                             <motion.div
                               animate={{ rotate: 360, scale: [1, 1.14, 1] }}
@@ -1000,8 +978,8 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                       )}
                     </AnimatePresence>
 
-                    <div className="mt-5 text-center space-y-1">
-                      <p className="text-xs sm:text-sm font-semibold text-slate-800">
+                    <div className="mt-4 text-center space-y-0.5">
+                      <p className="text-xs font-semibold text-slate-800">
                         {voicePhase === 'coalescing' && 'Calibrating voice & trade intelligence...'}
                         {voicePhase === 'listening' && 'Listening...'}
                         {voicePhase === 'thinking' && 'Analyzing verified corridor records...'}
@@ -1010,20 +988,20 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                       <p className="text-[11px] text-slate-500">
                         {voiceTranscript
                           ? `"${voiceTranscript}"`
-                          : 'Speak naturally or select a prompt below'}
+                          : 'Speak naturally or select a topic below'}
                       </p>
                     </div>
                   </div>
 
                   {/* Voice Controls */}
-                  <div className="w-full flex flex-col items-center gap-3">
+                  <div className="w-full flex flex-col items-center gap-2.5">
                     <div className="flex flex-wrap items-center justify-center gap-1.5">
                       {BUSINESS_PROMPTS.map((prompt) => (
                         <button
                           key={prompt}
                           type="button"
                           onClick={() => handleSend(prompt, true)}
-                          className="px-3 py-1 rounded-full bg-slate-50 border border-slate-200 hover:border-[#005A94] text-[11px] font-medium text-slate-700 hover:text-[#005A94] transition-colors cursor-pointer"
+                          className="px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 hover:border-[#005A94] text-[10px] font-medium text-slate-700 hover:text-[#005A94] transition-colors cursor-pointer"
                         >
                           {prompt}
                         </button>
@@ -1034,7 +1012,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                       <button
                         type="button"
                         onClick={startBrowserSpeechRecognition}
-                        className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-[#005A94] flex items-center justify-center transition-colors cursor-pointer"
+                        className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-[#005A94] flex items-center justify-center transition-colors cursor-pointer"
                         title="Tap to speak"
                         aria-label="Tap to speak"
                       >
@@ -1043,7 +1021,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                       <button
                         type="button"
                         onClick={() => setIsVoiceActive(false)}
-                        className="w-10 h-10 rounded-full bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center transition-colors cursor-pointer"
+                        className="w-9 h-9 rounded-full bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center transition-colors cursor-pointer"
                         title="Switch to text view"
                         aria-label="Switch to text view"
                       >
@@ -1054,7 +1032,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                 </motion.div>
               ) : (
                 /* -----------------------------------------------------------------
-                    SIMPLIFIED BUSINESS-FOCUSED CONVERSATIONAL VIEW (WITH TURN HISTORY)
+                    SIMPLIFIED BUSINESS-FOCUSED CONVERSATIONAL VIEW
                     ----------------------------------------------------------------- */
                 <motion.div
                   key="business-chat-view"
@@ -1062,12 +1040,12 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="flex-1 overflow-y-auto px-5 py-5 flex flex-col min-h-[340px] max-h-[430px]"
+                  className="flex-1 overflow-y-auto px-4 py-4 flex flex-col min-h-[310px] max-h-[410px]"
                 >
                   {messages.length === 0 ? (
-                    <div className="m-auto text-center space-y-4 max-w-md py-4">
+                    <div className="m-auto text-center space-y-3.5 max-w-xs py-3">
                       {/* Pulsing Center Fluid Orb (Click for Live Voice Mode) */}
-                      <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
+                      <div className="relative w-14 h-14 mx-auto flex items-center justify-center">
                         <motion.div
                           animate={{ scale: [1, 1.24, 1], opacity: [0.25, 0.04, 0.25] }}
                           transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
@@ -1087,7 +1065,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                             ]
                           }}
                           transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
-                          className="relative w-14 h-14 overflow-hidden shadow-[0_8px_24px_rgba(0,90,148,0.28)] bg-[#005A94] cursor-pointer"
+                          className="relative w-12 h-12 overflow-hidden shadow-[0_8px_24px_rgba(0,90,148,0.28)] bg-[#005A94] cursor-pointer"
                           title="Tap for live voice mode"
                         >
                           <motion.div
@@ -1103,11 +1081,11 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                       </div>
 
                       <div className="space-y-1">
-                        <h2 className="text-sm sm:text-base font-semibold text-slate-900 tracking-tight">
+                        <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
                           How can I assist your export trade?
                         </h2>
                         <p className="text-[11px] text-slate-500">
-                          HS {productHs} · {capacityKg.toLocaleString()} kg/mo · Northern Corridor
+                          {businessName} · HS {productHs}
                         </p>
                       </div>
 
@@ -1125,17 +1103,16 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                         ))}
                       </div>
 
-                      {/* Quick Link to Previous Session History if earlier threads exist */}
                       {totalSavedSessionsCount > 0 && (
-                        <div className="pt-2">
+                        <div className="pt-1">
                           <button
                             type="button"
                             onClick={() => setIsHistoryOpen(true)}
-                            className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[#005A94] hover:underline cursor-pointer"
+                            className="inline-flex items-center gap-1 text-[11px] font-medium text-[#005A94] hover:underline cursor-pointer"
                           >
                             <History className="w-3 h-3" />
                             <span>
-                              View {totalSavedSessionsCount} previous conversation{' '}
+                              View {totalSavedSessionsCount} saved{' '}
                               {totalSavedSessionsCount === 1 ? 'thread' : 'threads'}
                             </span>
                           </button>
@@ -1143,11 +1120,11 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                       )}
                     </div>
                   ) : (
-                    <div className="space-y-3.5 w-full">
-                      {/* Sticky Session Turn Counter Bar */}
-                      <div className="flex items-center justify-between pb-2 border-b border-slate-100 text-[10px] text-slate-400">
+                    <div className="space-y-3 w-full">
+                      {/* Session Turn Counter Bar */}
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-100 text-[10px] text-slate-400">
                         <span className="font-semibold uppercase tracking-wider">
-                          Session History · {activeTurnCount}{' '}
+                          {activeTurnCount}{' '}
                           {activeTurnCount === 1 ? 'Conversational Turn' : 'Conversational Turns'}
                         </span>
                         <button
@@ -1155,7 +1132,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                           onClick={() => setIsHistoryOpen(true)}
                           className="text-[#005A94] hover:underline font-medium cursor-pointer"
                         >
-                          Turn Log & Threads
+                          Turn Log
                         </button>
                       </div>
 
@@ -1169,13 +1146,12 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                             msg.role === 'user' ? 'items-end' : 'items-start'
                           }`}
                         >
-                          {/* Turn Metadata Header */}
-                          <div className="flex items-center gap-1.5 mb-1 px-1 text-[10px] text-slate-400">
+                          <div className="flex items-center gap-1.5 mb-0.5 px-1 text-[10px] text-slate-400">
                             <span className="font-mono font-semibold text-slate-500">
                               Turn #{msg.turnIndex}
                             </span>
                             <span>·</span>
-                            <span>{msg.role === 'user' ? 'You' : 'Trade Square AI'}</span>
+                            <span>{msg.role === 'user' ? 'You' : 'Trade AI'}</span>
                             {msg.mode === 'voice' && (
                               <>
                                 <span>·</span>
@@ -1198,7 +1174,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                           </div>
 
                           <div
-                            className={`max-w-[86%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${
+                            className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${
                               msg.role === 'user'
                                 ? 'bg-[#005A94] text-white'
                                 : 'bg-slate-50 text-slate-800 border border-slate-200/80'
@@ -1206,7 +1182,6 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                           >
                             <div className="whitespace-pre-line">{msg.content}</div>
 
-                            {/* Verified Kenyan Partner Action Rows */}
                             {msg.role === 'assistant' &&
                               msg.recommendedPartners &&
                               msg.recommendedPartners.length > 0 && (
@@ -1214,14 +1189,14 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                                   {msg.recommendedPartners.map(({ partner, score }) => (
                                     <div
                                       key={partner.id}
-                                      className="flex items-center justify-between gap-2.5 py-1.5 px-2.5 rounded-lg bg-white border border-slate-200/80 text-[11px]"
+                                      className="flex items-center justify-between gap-2 py-1.5 px-2.5 rounded-lg bg-white border border-slate-200/80 text-[11px]"
                                     >
                                       <div className="min-w-0">
                                         <span className="font-semibold text-slate-900 truncate block">
                                           {partner.name}
                                         </span>
                                         <span className="text-[10px] text-slate-500 font-mono tabular-nums">
-                                          {partner.city} · {partner.kraPin} · Score {score}/100
+                                          {partner.city} · {partner.kraPin} · {score}/100
                                         </span>
                                       </div>
                                       <div className="flex items-center gap-1.5 shrink-0">
@@ -1280,7 +1255,7 @@ export const TradeChat: React.FC<TradeChatProps> = ({
                   if (isHistoryOpen) setIsHistoryOpen(false);
                   handleSend();
                 }}
-                className="flex items-center gap-2 bg-slate-50 focus-within:bg-white border border-slate-200 focus-within:border-slate-400 rounded-full px-3.5 py-1.5 transition-colors"
+                className="flex items-center gap-1.5 bg-slate-50 focus-within:bg-white border border-slate-200 focus-within:border-slate-400 rounded-full px-3 py-1.5 transition-colors"
               >
                 <input
                   type="text"

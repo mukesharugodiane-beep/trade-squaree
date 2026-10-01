@@ -326,7 +326,7 @@ export const HowItWorksHighlights: React.FC<HowItWorksHighlightsProps> = ({
             }`}
           >
             {/* Top Subtitle Label */}
-            <span className="text-xs sm:text-[13px] font-bold text-gray-900 tracking-wider mb-1.5 uppercase text-center block">
+            <span className="text-xs sm:text-[13px] font-bold text-[#005A94] tracking-wider mb-1.5 uppercase text-center block">
               {categoryText}
             </span>
 
@@ -346,7 +346,7 @@ export const HowItWorksHighlights: React.FC<HowItWorksHighlightsProps> = ({
             <button
               type="button"
               onClick={() => onNavigate(currentSlide.targetPage)}
-              className="inline-flex items-center justify-center gap-1.5 px-6 py-2.5 rounded-md text-xs sm:text-sm font-semibold text-white bg-[#131d31] hover:bg-[#0096FC] transition-all duration-200 shadow-xs hover:shadow-md cursor-pointer group mb-5 sm:mb-6"
+              className="inline-flex items-center justify-center gap-1.5 px-6 py-2.5 rounded-md text-xs sm:text-sm font-semibold text-white bg-[#005A94] hover:bg-[#2673A6] transition-all duration-200 shadow-xs hover:shadow-md cursor-pointer group mb-5 sm:mb-6"
             >
               <span>{buttonLabelText}</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
@@ -365,7 +365,7 @@ export const HowItWorksHighlights: React.FC<HowItWorksHighlightsProps> = ({
                     key={index}
                     type="button"
                     onClick={() => goToSlide(index)}
-                    className={`transition-all duration-200 rounded-full cursor-pointer p-1 focus:outline-none focus:ring-2 focus:ring-[#0096FC]/50 ${
+                    className={`transition-all duration-200 rounded-full cursor-pointer p-1 focus:outline-none focus:ring-2 focus:ring-[#005A94]/50 ${
                       isActive ? 'scale-110' : 'hover:scale-105'
                     }`}
                     role="tab"
@@ -375,8 +375,8 @@ export const HowItWorksHighlights: React.FC<HowItWorksHighlightsProps> = ({
                     <span
                       className={`block rounded-full transition-all duration-300 ${
                         isActive
-                          ? 'w-2.5 h-2.5 bg-gray-900'
-                          : 'w-2 h-2 bg-transparent border border-gray-400 hover:border-gray-700'
+                          ? 'w-2.5 h-2.5 bg-[#005A94]'
+                          : 'w-2 h-2 bg-transparent border border-gray-400 hover:border-[#005A94]'
                       }`}
                     />
                   </button>

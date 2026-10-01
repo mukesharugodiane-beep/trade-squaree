@@ -51,6 +51,7 @@ export interface RwandanSME {
   monthlyCapacityKg: number;
   exWorksPriceRwf: number;
   selectedHsCode: string;
+  avatarUrl?: string;
 }
 
 export interface HandledProduct {
@@ -69,10 +70,13 @@ export interface EvidenceRecord {
   summary: string;
 }
 
+export type RegionalCountry = 'Kenya' | 'Uganda' | 'Burundi' | 'Tanzania' | 'DRC';
+
 export interface KenyanPartner {
   id: string;
   name: string; // must end with "(sample)"
-  city: KenyanCity;
+  city: KenyanCity | string;
+  country?: RegionalCountry;
   role: PartnerRole;
   evidenceLabel: EvidenceLabel;
   source: string;
@@ -92,6 +96,8 @@ export interface KenyanPartner {
     gatunaMalabaCrossingsCount: number;
     averageClearanceDays: number;
     lastShipmentDate: string;
+    onTimePaymentRatePct?: number;
+    yearsInCorridor?: number;
   };
   evidenceRecords: EvidenceRecord[];
 }
@@ -174,6 +180,7 @@ export interface CorridorAssumptions {
 
 export type ActiveScreen =
   | 'dashboard-home'
+  | 'partners-finder'
   | 'profile'
   | 'export-form'
   | 'shortlist'
